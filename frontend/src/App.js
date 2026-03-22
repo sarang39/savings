@@ -17,7 +17,6 @@ function App() {
   const [role, setRole] = useState("user");
   const [password, setPassword] = useState(null);
   const [phonenumber, setPhoneNumber] = useState(null);
-
   const [photo, setphoto] = useState(null)
   const [otp, setOtp] = useState(null);
   const [edit, setedit] = useState(0)
@@ -30,7 +29,6 @@ function App() {
   const [form, setform] = useState(1)
   const [wallet, setwallet] = useState([])
   const [profit, setprofit] = useState()
-  const [debit, setdebit] = useState([])
   const value = {
     profit, setprofit,
     wallet, setwallet,
