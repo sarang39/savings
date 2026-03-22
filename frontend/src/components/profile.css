@@ -1,0 +1,206 @@
+/* 
+.details {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    background-color: rgba(2, 106, 252, 0.822);
+    padding-top: 3%;
+    height: 100vh
+}
+
+.right {
+    display: flex;
+    flex-direction: column;
+    background-color: rgb(224, 141, 32);
+    width: 50%;
+    height: 100vh;
+    overflow-y: auto;
+     allows scrolling inside if content exceeds */
+/*}
+.left {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 30%;
+    height: 38vw;
+}
+.name {
+    font-size: 5vw;
+    color: rgb(255, 255, 0);
+}
+
+.amounts {
+    font-size: 2vw;
+    color: rgb(255, 255, 0);
+    background-color: aqua;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 7% 12%;
+    gap: 10px;
+}
+
+.dp {
+    background-color: rgb(63, 73, 74);
+    width: 30%;
+    height: 9vw;
+    border-radius: 100%;
+}
+
+.amount {
+    background-color: aquamarine;
+}
+
+.transaction-details {
+    background-color: #fff;
+    width: 90%;
+    margin: 5% auto;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.transaction-table {
+    background-color: #fff;
+    width: 90%;
+    height: 50vh;
+    /* use viewport height for better scaling */
+/*overflow-y: auto;
+/* vertical scroll only when needed */
+/*margin: 5% auto;
+border-radius: 10px;
+padding: 20px;
+box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+*/
+/* Premium Dashboard Layout */
+@media (prefers-reduced-motion: no-preference) {
+    .profile-image-wrapper {
+        animation: App-logo-spin 02s cubic-bezier(0.645, 0.045, 0.355, 1);
+    }
+}
+
+.details {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    background: linear-gradient(135deg, #1f2937, #111827);
+    /* dark gradient */
+    padding: 2rem;
+    height: 100vh;
+    color: #f9fafb;
+    /* light text */
+    font-family: 'Segoe UI', Roboto, sans-serif;
+}
+
+.left {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    width: 30%;
+    padding: 2rem;
+    background-color: #2d3748;
+    border-radius: 12px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.dp {
+    background-color: #4a5568;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    margin-bottom: 1rem;
+    border: 3px solid #38b2ac;
+    /* teal accent */
+}
+
+.name {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: #f9fafb;
+    margin-bottom: 0.5rem;
+}
+
+.amounts {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    color: #e2e8f0;
+    font-size: 1rem;
+
+    border-radius: 10px;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+    margin-top: 1rem;
+}
+
+.amounts>div {
+    position: relative;
+    display: flex;
+    color: #ffffff;
+    border-radius: 20px;
+    width: 16em;
+    justify-content: space-around;
+    align-items: center;
+    height: 50%;
+}
+
+.amounts>div>div>img {
+    color: #ffffff;
+    position: absolute;
+    top: 55px;
+    right: 10%;
+    width: 20px;
+    overflow: hidden;
+    height: 20px;
+}
+
+.right {
+    display: flex;
+    flex-direction: column;
+    width: 65%;
+    height: 100%;
+    overflow-y: auto;
+    padding: 2rem;
+    background-color: #f9fafb;
+    border-radius: 12px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.transaction-details,
+.transaction-table {
+    background-color: #ffffff;
+    width: 100%;
+    margin: 1rem 0;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.transaction-table {
+    height: 50vh;
+    overflow-y: auto;
+}
+
+.transaction-table table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.transaction-table th,
+.transaction-table td {
+    padding: 0.75rem;
+    color: #2d3748;
+    text-align: left;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.transaction-table th {
+    background-color: #edf2f7;
+    color: #2d3748;
+    font-weight: 600;
+}

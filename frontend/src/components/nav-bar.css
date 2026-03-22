@@ -1,0 +1,130 @@
+/* Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Container */
+.navbar-container {
+
+    width: 100%;
+    background-color: #111827;
+    color: #ffffff;
+    position: fixed;
+    z-index: 1000;
+}
+
+/* Top bar */
+.top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 20px;
+    /* background-color: #1e293b; */
+    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+}
+
+.logo {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.settings-btn {
+
+    background: none;
+    border: none;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.settings-btn:hover {
+    color: #38bdf8;
+}
+
+/* Dropdown menu */
+.top-menu {
+    display: flex;
+    right: 0%;
+    gap: 20px;
+    flex-direction: column;
+    background-color: #334155;
+    padding: 10px 0;
+    animation: fadeIn 0.3s ease-in-out;
+    position: fixed;
+    height: 100vh;
+}
+
+.top-menu button {
+    display: flex;
+    background: none;
+    justify-content: start;
+    border: none;
+    color: white;
+    font-size: 15px;
+    cursor: pointer;
+    transition: 0.3s;
+    padding: 8px 12px;
+}
+
+.top-menu button:hover {
+    background-color: #475569;
+    border-radius: 5px;
+}
+
+/* Animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (width>67vw) {
+    .top {}
+
+}
+
+.top {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 25px;
+    padding: 18px 40px;
+    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.top button {
+    background: transparent;
+    border: none;
+    color: white;
+    font-size: 16px;
+    font-weight: 500;
+    padding: 10px 18px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.top button:hover {
+    background: #D4AF37;
+    color: black;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.top button:active {
+    transform: scale(0.95);
+}
