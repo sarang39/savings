@@ -38,7 +38,6 @@ const getTransactionById = async (req, res) => {
   const userid = req.params.id
   try {
     const transaction = await Transaction.find({ userid });
-    console.log("id ", req.params.id)
     console.log(transaction)
     if (!transaction) {
       return res.status(404).json({ message: "Transaction not found" });
@@ -86,52 +85,41 @@ const allcalculations = async (req, res) => {
     return res.status(500).json({ message: "Server error  at allcalculations" });
   }
 };
+//edit payment
+// const Editpayment = async (req, res) => {
+//   const transactionid = req.params.id
+//   const newdata = req.body.data
+//   try {
+//     const transaction = await Transaction.findOneAndUpdate(transactionid,
+//       { $set: newdata },         // update
+//       { new: true }              // return updated doc
+//     );
 
-module.exports = { createTransaction, getAllTransactions, getTransactionById, allcalculations };
+//     console.log(transaction)
+//     if (!transaction) {
+//       return res.status(200).json({ message: "Transaction not found" });
+//     }
+//     res.json(transaction);
+//   } catch (err) {
+//     console.error(err);
+//     res.status(500).json({ message: "Server error" });
+//   }
 
+// }
+const Editpayment = async (req, res) => {
+  try {
+    const id = req.params.id
+    const User_and_paymentData = req.body
+    const update = await Transaction.findByIdAndUpdate(id, {
+      weeklypayment: User_and_paymentData.weeklypayment
+    })
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    console.log(id)
+    res.status(200).json(update)
+  }
+  catch (err) {
+    console.error(err)
+    res.status(500).json({ message: "server erro while edit payment" })
+  }
+}
+module.exports = { createTransaction, getAllTransactions, getTransactionById, allcalculations, Editpayment };
