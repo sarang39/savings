@@ -67,7 +67,6 @@ export default function Profile() {
     useEffect(() => {
         getProfileANDtransactions();
         totaldetails()
-
     }, [id]);
     return (
         <div>
@@ -85,8 +84,7 @@ export default function Profile() {
                                                         ? `http://localhost:5000${userData.photo}`
                                                         : "https://www.shutterstock.com/image-vector/default-avatar-profile-icon-transparent-600nw-2463868847.jpg"
                                                 }
-                                                alt="profile"
-                                            />
+                                                alt="profile" />
                                         </div>
                                         <div>
                                             <h2 className="profile-name">{userData.name}</h2>
@@ -120,18 +118,18 @@ export default function Profile() {
                                 <div>{totalAmount > wallet ? wallet - totalAmount : 0}</div>
                                 <div>
                                     <img src={photo3} alt="photo" />
-                                </div></div>
+                                </div>
+                            </div>
                         </div>
-
                         <div className="transaction-details">
                             <p>rating</p>
                             <p>transaction details</p>
                             <table className="transaction-table">
                                 <tr>
-                                    <th>date{totalAmount}</th>
-                                    <th>amount</th>
-                                    <th>fine</th>
-                                    <th>loan</th>
+                                    <th>Date</th>
+                                    <th>Amount</th>
+                                    <th>Fine</th>
+                                    <th>Loan</th>
                                 </tr>
                                 {transactonData.map((item) => (
                                     <tr key={item._id}>
