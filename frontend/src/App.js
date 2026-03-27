@@ -28,8 +28,10 @@ function App() {
   const [profileData, setProfileData] = useState({})
   const [form, setform] = useState(1)
   const [wallet, setwallet] = useState([])
+  const [addpayment, setaddpayment] = useState(false);
   const [profit, setprofit] = useState()
   const value = {
+    addpayment, setaddpayment,
     profit, setprofit,
     wallet, setwallet,
     form, setform,
@@ -71,7 +73,7 @@ function App() {
             <Route path='/home' element={<Home />} />
             <Route path='/profile/:id' element={<Profile />} />
             <Route path='/login' element={<Registration />} />
-            <Route path='/payment' element={<Payment />} />
+            <Route path='/payment/:id' element={<Payment />} />
             <Route path='/chart' element={<MyChart />} />
           </Routes>
         </BrowserRouter>

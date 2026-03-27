@@ -7,11 +7,13 @@ import "./registration.css";
 import photo1 from "./images/Screenshot 2026-03-19 122942.png"
 import photo2 from "./images/Screenshot 2026-03-19 123007.png"
 import photo3 from "./images/Screenshot 2026-03-19 123023.png"
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 export default function Profile() {
+    const navigate = useNavigate();
+    const [newWeeklyPayment, setNewWeeklyPayment] = useState(0)
     const [newname, setnewname] = useState()
     const token = localStorage.getItem("AuthToken");
-    const { userData, setUserData, edit, setedit, wallet, setwallet, profit, setprofit } = useContext(MyContext)
+    const { userData, setUserData, edit, setedit, wallet, setwallet, addpayment, setaddpayment, profit, setprofit } = useContext(MyContext)
     const [transactonData, settransactionData] = useState([])
     const { id } = useParams()
     const totalAmount = transactonData.reduce(
@@ -49,6 +51,9 @@ export default function Profile() {
             console.error("error fetching profile", err);
         }
         console.log("transaction data", transactonData)
+    }
+    async function RePay() {
+        const response = axios.put(`http://localhost:5000/api/transactions/editpayment/${id}`, { weeklypayment: newWeeklyPayment })
     }
     async function Edituser() {
         try {
@@ -130,13 +135,23 @@ export default function Profile() {
                                     <th>Amount</th>
                                     <th>Fine</th>
                                     <th>Loan</th>
+                                    <th><button onClick={() => (setaddpayment(true))}>⚙️{console.log(addpayment)}</button></th>
                                 </tr>
+                                {/* {addpayment ? (): ()} */}
+                                {addpayment ? <div></div> : <div></div>}
                                 {transactonData.map((item) => (
-                                    <tr key={item._id}>
+                                    <tr
+                                        key={item._id}>
                                         <td>{item.date.split('T')[0]}</td>
                                         <td>{item.weeklypayment}</td>
                                         <td>{item.weeklypaymentfine}</td>
                                         <td>{item.loan}</td>
+                                        {addpayment && item.weeklypayment === 0 ?
+                                            <td ><button onClick={() => navigate(`/payment/${item._id}`)} >Re-pay</button></td>
+                                            :
+                                            <td>
+
+                                            </td>}
                                     </tr>
                                 ))}
                             </table>

@@ -27,7 +27,7 @@ import { MyContext } from "./Mycontext";
 export default function Nav() {
     const token = localStorage.getItem("AuthToken");
     const navigate = useNavigate();
-    const { profileData, edit, setedit } = useContext(MyContext)
+    const { profileData, edit, setedit, setform } = useContext(MyContext)
     const [showMenu, setShowMenu] = useState(false);
     const id = localStorage.getItem("id");
 
@@ -38,6 +38,14 @@ export default function Nav() {
     function profile() {
         navigate(`/profile/${id}`)
     }
+    function login() {
+        setform(0)
+        navigate('/registration')
+    }
+    function registration() {
+        setform(1)
+        navigate('/registration')
+    }
 
     return (
         <div className="navbar-container">
@@ -46,9 +54,9 @@ export default function Nav() {
                 <nav className="top">
                     <button onClick={() => profile()}>Profile</button>
                     <button onClick={() => navigate('/home')}>Home</button>
-                    <button onClick={() => navigate('/registration')}>Registration</button>
-                    <button onClick={() => navigate('/registration')}>Login</button>
-                    <button onClick={() => navigate('/payment')}>Payment</button>
+                    <button onClick={() => registration()}>Registration</button>
+                    <button onClick={() => login()}>Login</button>
+                    <button onClick={() => navigate(`/payment/${id}`)}>Payment</button>
                     <button onClick={() => navigate('/chart')}>Chart</button>
                     <button >contact</button>
                     <button >about</button>

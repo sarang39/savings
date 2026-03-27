@@ -3,7 +3,7 @@ import "./payment.css";
 import axios from 'axios';
 export default function Payment() {
 
-    const [payment, setpayment] = useState(0)
+    const [payment, setpayment] = useState(50)
     const token = localStorage.getItem("AuthToken");
     async function addtransaction(e) {
         e.preventDefault()
