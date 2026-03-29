@@ -26,7 +26,7 @@ const MyChart = () => {
 
     async function GetAlltransactions() {
         try {
-            const res = await axios.get(`http://localhost:5000/api/transactions/listTransactions`)
+            const res = await axios.get(`https://savings-hndc.onrender.com/api/transactions/listTransactions`)
             setmaptransaction(res.data)
 
         }

@@ -9,7 +9,7 @@ export default function Payment() {
         e.preventDefault()
         try {
             console.log(token)
-            const response = await axios.post("http://localhost:5000/api/transactions/createTransaction", {
+            const response = await axios.post("https://savings-hndc.onrender.com/api/transactions/createTransaction", {
                 "weeklypayment": Number(payment)
             }, {
                 headers: { Authorization: `Bearer ${token}` }

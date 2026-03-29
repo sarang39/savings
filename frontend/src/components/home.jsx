@@ -31,7 +31,7 @@ export default function Home() {
     // }, [mapp])
     async function Featchuser() {
         try {
-            const response = await axios.get("http://localhost:5000/api/users/getallusers")
+            const response = await axios.get("https://savings-hndc.onrender.com/api/users/getallusers")
             setmapuser(response.data)
             console.log("mapuser", response.data)
             console.log("setmapuser", mapuser)
@@ -43,7 +43,7 @@ export default function Home() {
 
     async function GetAlltransactions() {
         try {
-            const res = await axios.get(`http://localhost:5000/api/transactions/listTransactions`)
+            const res = await axios.get(`https://savings-hndc.onrender.com/api/transactions/listTransactions`)
             setmaptransaction(res.data)
 
         }
@@ -71,7 +71,7 @@ export default function Home() {
                             <img
                                 src={
                                     item.photo
-                                        ? `http://localhost:5000${item.photo}`
+                                        ? `https://savings-hndc.onrender.com${item.photo}`
                                         : "https://www.shutterstock.com/image-vector/default-avatar-profile-icon-transparent-600nw-2463868847.jpg"
                                 }
                                 alt="profile"

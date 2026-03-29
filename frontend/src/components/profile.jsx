@@ -21,7 +21,7 @@ export default function Profile() {
     );
     async function totaldetails() {
         try {
-            const response = await axios.get("http://localhost:5000/api/transactions/allcalculations")
+            const response = await axios.get("https://savings-hndc.onrender.com/api/transactions/allcalculations")
             setwallet(response.data.wallet)
         }
         catch (err) {
@@ -30,7 +30,7 @@ export default function Profile() {
     }
     async function usertrnsation() {
         try {
-            const response = await axios.get(`http://localhost:5000/api/transactions/gettransaction/${id}`, {
+            const response = await axios.get(`https://savings-hndc.onrender.com/api/transactions/gettransaction/${id}`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             settransactionData(response.data)
@@ -42,7 +42,7 @@ export default function Profile() {
     }
     async function getProfileANDtransactions() {
         try {
-            const response = await axios.get(`http://localhost:5000/api/users/profile/${id}`)
+            const response = await axios.get(`https://savings-hndc.onrender.com/api/users/profile/${id}`)
             console.log("profile response", response.data);
             setUserData(response.data)
             usertrnsation()
@@ -53,11 +53,11 @@ export default function Profile() {
         console.log("transaction data", transactonData)
     }
     async function RePay() {
-        const response = axios.put(`http://localhost:5000/api/transactions/editpayment/${id}`, { weeklypayment: newWeeklyPayment })
+        const response = axios.put(`https://savings-hndc.onrender.com/api/transactions/editpayment/${id}`, { weeklypayment: newWeeklyPayment })
     }
     async function Edituser() {
         try {
-            const response = await axios.put(`http://localhost:5000/api/users/edituser/${id}`, { name: newname }, {
+            const response = await axios.put(`https://savings-hndc.onrender.com/api/users/edituser/${id}`, { name: newname }, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             if (response.status === 200) {
@@ -86,7 +86,7 @@ export default function Profile() {
                                             <img
                                                 src={
                                                     userData.photo
-                                                        ? `http://localhost:5000${userData.photo}`
+                                                        ? `https://savings-hndc.onrender.com${userData.photo}`
                                                         : "https://www.shutterstock.com/image-vector/default-avatar-profile-icon-transparent-600nw-2463868847.jpg"
                                                 }
                                                 alt="profile" />
@@ -170,7 +170,7 @@ export default function Profile() {
                                             <img
                                                 src={
                                                     userData.photo
-                                                        ? `http://localhost:5000${userData.photo}`
+                                                        ? `https://savings-hndc.onrender.com${userData.photo}`
                                                         : "https://www.shutterstock.com/image-vector/default-avatar-profile-icon-transparent-600nw-2463868847.jpg"
                                                 }
                                                 alt="profile"

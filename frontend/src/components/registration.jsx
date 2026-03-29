@@ -30,7 +30,7 @@ export default function Registration() {
     async function userlogin(e) {
         e.preventDefault()
         try {
-            const response = await axios.post("http://localhost:5000/api/users/login", {
+            const response = await axios.post("https://savings-hndc.onrender.com/api/users/login", {
                 email: email,
                 password: password
             });
@@ -62,7 +62,7 @@ export default function Registration() {
             formData.append("phonenumber", phonenumber);
             formData.append("photo", photo);
             formData.append("role", role);
-            const response = await axios.post("http://localhost:5000/api/users/register", formData, {
+            const response = await axios.post("https://savings-hndc.onrender.com/api/users/register", formData, {
                 headers: {
                     "Content-Type": "multipart/form-data"
                 }
