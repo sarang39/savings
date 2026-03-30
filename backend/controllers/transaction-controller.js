@@ -94,7 +94,6 @@ const allcalculations = async (req, res) => {
 //       { $set: newdata },         // update
 //       { new: true }              // return updated doc
 //     );
-
 //     console.log(transaction)
 //     if (!transaction) {
 //       return res.status(200).json({ message: "Transaction not found" });
@@ -104,7 +103,6 @@ const allcalculations = async (req, res) => {
 //     console.error(err);
 //     res.status(500).json({ message: "Server error" });
 //   }
-
 // }
 const Editpayment = async (req, res) => {
   try {

@@ -1,6 +1,5 @@
 const jwt = require("jsonwebtoken")
-const { CloudinaryStorage } = require("multer-storage-cloudinary");
-const cloudinary = require("../config/cloudinary");
+
 const JWT_SECRET = "jwtSecret"
 
 const multer = require("multer")

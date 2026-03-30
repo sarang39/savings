@@ -2,47 +2,93 @@ const bcrypt = require('bcrypt');
 const jwt = require("jsonwebtoken");
 const User = require("../model/users");
 const cloudinary = require("../config/cloudinary");
-
 const register = async (req, res) => {
     const { name, email, password, role } = req.body;
+
     try {
         const existing = await User.findOne({ email });
 
         if (existing) {
             return res.status(400).json({ message: "User already exists" });
         }
+
         console.log(req.body);
         console.log(req.file);
+
         const hashedPassword = await bcrypt.hash(password, 10);
+
+        let imageUrl = null; // ✅ define outside
+
         if (req.file) {
             const result = await cloudinary.uploader.upload(req.file.path, {
                 folder: "savings-app",
                 use_filename: true
             });
+
+            imageUrl = result.secure_url; // ✅ assign here
         }
+
         const userData = {
             name,
             email,
             role,
             password: hashedPassword,
-            photo: req.file ? result.secure_url : null
+            photo: imageUrl // ✅ use variable
         };
+
         const user = new User(userData);
         await user.save();
+
         res.status(201).json({
             message: "User registered successfully",
             user
         });
 
     } catch (err) {
-
         console.error("Register error:", err);
-
-        res.status(500).json({
-            message: "Server error"
-        });
+        res.status(500).json({ message: "Server error" });
     }
 };
+// const register = async (req, res) => {
+//     const { name, email, password, role } = req.body;
+//     try {
+//         const existing = await User.findOne({ email });
+
+//         if (existing) {
+//             return res.status(400).json({ message: "User already exists" });
+//         }
+//         console.log(req.body);
+//         console.log(req.file);
+//         const hashedPassword = await bcrypt.hash(password, 10);
+//         if (req.file) {
+//             const result = await cloudinary.uploader.upload(req.file.path, {
+//                 folder: "savings-app",
+//                 use_filename: true
+//             });
+//         }
+//         const userData = {
+//             name,
+//             email,
+//             role,
+//             password: hashedPassword,
+//             photo: req.file ? result.secure_url : null
+//         };
+//         const user = new User(userData);
+//         await user.save();
+//         res.status(201).json({
+//             message: "User registered successfully",
+//             user
+//         });
+
+//     } catch (err) {
+
+//         console.error("Register error:", err);
+
+//         res.status(500).json({
+//             message: "Server error"
+//         });
+//     }
+// };
 const login = async (req, res) => {
     const JWT_SECRET = "jwtSecret";
     const { email, password } = req.body
