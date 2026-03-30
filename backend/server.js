@@ -7,25 +7,12 @@ const fs = require('fs');
 const multer = require('multer');
 const path = require('path');
 const app = express();
-const PORT = 5000;
+const PORT = process.env.PORT || 5000;
 
 if (!fs.existsSync("uploads")) {
     fs.mkdirSync("uploads")
 }
-// multer setup
-// const storage = multer.diskStorage({
-//     destination: (req, file, cb) => {
-//         cb(null, "uploads")
-//     },
-//     filename: (req, file, cb) => {
-//         const uniqueName = Date.now() + "-" + file.originalname
-//         cb(null, uniqueName)
-//     }
-// })
 
-// const upload = multer({ storage })
-
-// app.use("/uploads", express.static("uploads"))
 connectDB()
 app.use(cors())
 app.use(express.json())
