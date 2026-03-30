@@ -71,7 +71,7 @@ export default function Home() {
                             <img
                                 src={
                                     item.photo
-                                        ? `https://savings-hndc.onrender.com${item.photo}`
+                                        ? item.photo
                                         : "https://www.shutterstock.com/image-vector/default-avatar-profile-icon-transparent-600nw-2463868847.jpg"
                                 }
                                 alt="profile"

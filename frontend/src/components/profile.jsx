@@ -83,7 +83,7 @@ export default function Profile() {
                                 (
                                     <div>
                                         <div className="profile-image-wrapper">
-                                            <img
+                                            {console.log("photo path", userData.photo)}<img
                                                 src={
                                                     userData.photo
                                                         ? userData.photo
