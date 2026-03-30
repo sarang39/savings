@@ -1,7 +1,7 @@
 const bcrypt = require('bcrypt');
 const jwt = require("jsonwebtoken");
 const User = require("../model/users");
-const cloudinary = require("../config/cloudinaryconfig");
+const cloudinary = require("../config/cloudinary");
 
 const register = async (req, res) => {
     const { name, email, password, role } = req.body;
