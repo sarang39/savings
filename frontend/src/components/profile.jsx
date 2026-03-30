@@ -86,7 +86,7 @@ export default function Profile() {
                                             <img
                                                 src={
                                                     userData.photo
-                                                        ? `https://savings-hndc.onrender.com${userData.photo}`
+                                                        ? userData.photo
                                                         : "https://www.shutterstock.com/image-vector/default-avatar-profile-icon-transparent-600nw-2463868847.jpg"
                                                 }
                                                 alt="profile" />
