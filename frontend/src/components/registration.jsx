@@ -69,13 +69,13 @@ export default function Registration() {
             });
 
             if (response.status === 201) {
-                alert("User registered successfully");
                 setUserName("");
-                setEmail("");
                 setPassword("");
                 setPhoneNumber("");
                 setRole("user")
                 setform(0)
+                alert("User registered successfully");
+
             }
             else {
                 alert("Registration failed");
