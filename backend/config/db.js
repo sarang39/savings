@@ -1,7 +1,17 @@
 const mongoose = require("mongoose")
 
+const connectDB = () => {
+    const mongoUri = process.env.MONGO_URI;
+    if (!mongoUri) {
+        throw new Error('MONGO_URI is not defined. Set it in .env or environment variables.');
+    }
 
-const connectDB = () => mongoose.connect(process.env.MONGO_URI)
-    .then(() => console.log("MongoDB connected"))
-    .catch(err => console.log(err))
+    return mongoose.connect(mongoUri)
+        .then(() => console.log("MongoDB connected"))
+        .catch(err => {
+            console.error(err);
+            throw err;
+        });
+};
+
 module.exports = connectDB

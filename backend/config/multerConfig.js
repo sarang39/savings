@@ -1,10 +1,11 @@
 const multer = require("multer");
-
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        const filepath = Path.join("uploads", file.originalname)
-        if (fs.existsSync(filepath))
-            return cb(new Error("file already exist!"), file.originalname);
-    }
-})
+const { cloudinaryStorage } = require("multer-storage-cloudinary");
+const cloudinary = require("../controllers/cloudinaryconfig");
+const fs = require("fs");
+const Path = require("path");
+const storage = cloudinaryStorage({
+    cloudinary: cloudinary,
+    folder: "uploads",
+    allowedFormats: ["jpg", "png", "gif"]
+});
 const upload = multer({ storage: storage });
