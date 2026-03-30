@@ -1,7 +1,7 @@
 const bcrypt = require('bcrypt');
 const jwt = require("jsonwebtoken");
 const User = require("../model/users");
-
+const cloudinary = require("../config/cloudinaryconfig");
 
 const register = async (req, res) => {
     const { name, email, password, role } = req.body;
@@ -14,12 +14,18 @@ const register = async (req, res) => {
         console.log(req.body);
         console.log(req.file);
         const hashedPassword = await bcrypt.hash(password, 10);
+        if (req.file) {
+            const result = await cloudinary.uploader.upload(req.file.path, {
+                folder: "savings-app",
+                use_filename: true
+            });
+        }
         const userData = {
             name,
             email,
             role,
             password: hashedPassword,
-            photo: req.file ? `/uploads/${req.file.filename}` : null
+            photo: req.file ? result.secure_url : null
         };
         const user = new User(userData);
         await user.save();
