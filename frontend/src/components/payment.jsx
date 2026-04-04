@@ -44,7 +44,7 @@ export default function Payment() {
                 <form className="form" >
                     <input type="number" onChange={(e) => { setpayment(e.target.value) }} />
                     <button type="submit" onClick={(e) => addtransaction(e)} > "weeklypayment": {payment}</button>
-                    <button type="submit" onClick={(e) => addpaymentS()} > "weeklypayment": {payment}</button>
+                    <button type="submit" onClick={(e) => addpaymentS()} > "weeklypayment for": {payment}</button>
                 </form>
             </div>
         </div >
