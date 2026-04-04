@@ -6,14 +6,12 @@ const userRoutes = require("./routes/user-routes");
 const transactionRoutes = require("./routes/transaction-routes");
 const fs = require('fs');
 const multer = require('multer');
-const path = require('path');
 const app = express();
-const PORT = process.env.PORT || 5000;
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
-if (!fs.existsSync("uploads")) {
-    fs.mkdirSync("uploads")
-}
+const PORT = process.env.PORT || 5000;
+
+
 
 const start = async () => {
     try {

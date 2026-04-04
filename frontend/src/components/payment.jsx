@@ -27,9 +27,7 @@ export default function Payment() {
         e.preventDefault()
         try {
             console.log(token)
-            const response = await axios.post("https://savings-hndc.onrender.com/api/transactions/pay", { amount: Number(payment) }, {
-                headers: { Authorization: `Bearer ${token}` }
-            })
+            const response = await axios.post("https://savings-hndc.onrender.com/api/transactions/pay", { amount: Number(payment) })
             if (response.status === 200) {
                 alert("Payment processed successfully with Stripe!");
             }
