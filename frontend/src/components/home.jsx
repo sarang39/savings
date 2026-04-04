@@ -19,16 +19,14 @@ export default function Home() {
     useEffect(() => {
         Featchuser()
         GetAlltransactions()
-    }, [])
+    }, [mapuser, maptransaction])
     useEffect(() => {
         console.log("maptransactions updated:", maptransaction)
     }, [maptransaction])
     useEffect(() => {
         console.log("mapuser updated:", mapuser)
     }, [mapuser])
-    // useEffect(() => {
-    //     console.log("mapp updated:", mapp)
-    // }, [mapp])
+
     async function Featchuser() {
         try {
             const response = await axios.get("https://savings-hndc.onrender.com/api/users/getallusers")

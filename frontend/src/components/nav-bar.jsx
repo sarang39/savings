@@ -20,7 +20,7 @@
 // }
 import "./nav-bar.css";
 import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useContext } from "react";
 import { MyContext } from "./Mycontext";
 
