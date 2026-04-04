@@ -17,9 +17,13 @@ export default function Home() {
         navigate(`/profile/${id}`)
     }
     useEffect(() => {
-        Featchuser()
-        GetAlltransactions()
-    }, [mapuser, maptransaction])
+        const loadData = async () => {
+            await Featchuser();
+            await GetAlltransactions();
+        };
+
+        loadData();
+    }, []);
     useEffect(() => {
         console.log("maptransactions updated:", maptransaction)
     }, [maptransaction])
