@@ -36,21 +36,22 @@ export default function Payment() {
         } catch (err) {
             alert("retry", err)
         }
-
-
-        // Implement payment logic here
-        return (
-            <div className="paymentcontainer" >
-                <div >
-                    <form className="form" >
-                        <input type="number" onChange={(e) => { setpayment(e.target.value) }} />
-                        <button type="submit" onClick={addtransaction} > "weeklypayment": {payment}</button>
-                        <button type="submit" onClick={addpaymentS} > "weeklypayment": {payment}</button>
-                    </form>
-                </div>
-            </div >
-        )
     }
+
+
+    // Implement payment logic here
+    return (
+        <div className="paymentcontainer" >
+            <div >
+                <form className="form" >
+                    <input type="number" onChange={(e) => { setpayment(e.target.value) }} />
+                    <button type="submit" onClick={addtransaction} > "weeklypayment": {payment}</button>
+                    <button type="submit" onClick={addpaymentS} > "weeklypayment": {payment}</button>
+                </form>
+            </div>
+        </div >
+    )
+}
 
 
 
