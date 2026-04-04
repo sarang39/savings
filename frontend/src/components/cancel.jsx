@@ -19,3 +19,4 @@ function Cancel() {
         </div>
     );
 }
+export default Cancel();

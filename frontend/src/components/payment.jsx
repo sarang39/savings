@@ -23,16 +23,34 @@ export default function Payment() {
         }
 
     }
+    // async function addpaymentS(e) {
+    //     e.preventDefault()
+    //     try {
+    //         console.log(token)
+    //         const response = await axios.post("https://savings-hndc.onrender.com/api/transactions/pay", { amount: Number(payment) })
+    //         if (response.status === 200) {
+
+    //         }
+    //     } catch (err) {
+    //         alert("retry", err)
+    //     }
+    // }
     async function addpaymentS(e) {
-        e.preventDefault()
+        e.preventDefault();
         try {
-            console.log(token)
-            const response = await axios.post("https://savings-hndc.onrender.com/api/transactions/pay", { amount: Number(payment) })
+            const response = await axios.post(
+                "https://savings-hndc.onrender.com/api/transactions/pay",
+                { amount: Number(payment) }
+            );
+
             if (response.status === 200) {
-                alert("Payment processed successfully with Stripe!");
+                // 🔥 REDIRECT to Stripe Checkout
+                window.location.href = response.data.url;
             }
+
         } catch (err) {
-            alert("retry", err)
+            console.log(err);
+            alert("Retry payment");
         }
     }
 
@@ -48,7 +66,7 @@ export default function Payment() {
                     <input type="number"
                     />
                     <button type="submit" onClick={(e) => addtransaction(e)} > "weeklypayment": {payment}</button>
-                    <button type="submit" onClick={(e) => addpaymentS()} > "weeklypayment for": {payment}</button>
+                    <button type="submit" onClick={(e) => addpaymentS(e)} > "wjjjeeklypayment for": {payment}</button>
                 </form>
             </div>
         </div >

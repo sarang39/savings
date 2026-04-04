@@ -13,7 +13,6 @@ import Cancel from './components/cancel';
 
 
 
-
 function App() {
   const [userName, setUserName] = useState(null);
   const [email, setEmail] = useState(null);
@@ -76,8 +75,8 @@ function App() {
             <Route path='/home' element={<Home />} />
             <Route path='/profile/:id' element={<Profile />} />
             <Route path='/login' element={<Registration />} />
-            <Route path='/success' element={<Success />} />
-            <Route path='/cancel' element={<Cancel />} />
+            <Route path='/success/:id' element={<Success />} />
+            <Route path='/cancel/:id' element={<Cancel />} />
 
             <Route path='/payment/:id' element={<Payment />} />
           </Routes>
