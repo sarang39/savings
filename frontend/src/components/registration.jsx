@@ -1,12 +1,10 @@
-
-import "./registration.css"
+import "./registration.css";
 import { useContext } from "react";
 import { MyContext } from "./Mycontext";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 export default function Registration() {
     const Navigate = useNavigate()
-
     const {
         photo,
         form,
@@ -25,8 +23,6 @@ export default function Registration() {
         setOtp,
         setProfileData
     } = useContext(MyContext);
-
-
     async function userlogin(e) {
         e.preventDefault()
         try {
@@ -48,7 +44,6 @@ export default function Registration() {
             }
         }
         catch (err) {
-
             console.log(err)
         }
     }
@@ -67,7 +62,6 @@ export default function Registration() {
                     "Content-Type": "multipart/form-data"
                 }
             });
-
             if (response.status === 201) {
                 setUserName("");
                 setPassword("");
@@ -75,12 +69,10 @@ export default function Registration() {
                 setRole("user")
                 setform(0)
                 alert("User registered successfully");
-
             }
             else {
                 alert("Registration failed");
             }
-
         }
         catch (err) {
             console.log(err)

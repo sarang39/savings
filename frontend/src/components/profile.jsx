@@ -75,8 +75,15 @@ export default function Profile() {
     }, [id]);
     return (
         <div>
+            <div >
+
+
+
+            </div>
             {edit === 0 ? (
+
                 <div className="details">
+
                     <div className="left">
                         <div className="profile-card">
                             {userData && typeof userData === 'object' ?

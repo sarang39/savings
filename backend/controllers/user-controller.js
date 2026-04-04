@@ -4,30 +4,22 @@ const User = require("../model/users");
 const cloudinary = require("../config/cloudinary");
 const register = async (req, res) => {
     const { name, email, password, role } = req.body;
-
     try {
         const existing = await User.findOne({ email });
-
         if (existing) {
             return res.status(400).json({ message: "User already exists" });
         }
-
         console.log(req.body);
         console.log(req.file);
-
         const hashedPassword = await bcrypt.hash(password, 10);
-
         let imageUrl = null; // ✅ define outside
-
         if (req.file) {
             const result = await cloudinary.uploader.upload(req.file.path, {
                 folder: "savings-app",
                 use_filename: true
             });
-
             imageUrl = result.secure_url; // ✅ assign here
         }
-
         const userData = {
             name,
             email,
@@ -90,7 +82,7 @@ const register = async (req, res) => {
 //     }
 // };
 const login = async (req, res) => {
-    const JWT_SECRET = "jwtSecret";
+    const JWT_SECRET = process.env.JWT_SECRET;
     const { email, password } = req.body
     try {
         const user = await User.findOne({ email })
@@ -161,3 +153,4 @@ const edituser = async (req, res) => {
     }
 }
 module.exports = { register, login, getProfile, getAllUsers, edituser };
+

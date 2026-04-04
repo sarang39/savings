@@ -2,7 +2,6 @@ const express = require("express");
 const router = express.Router();
 const transactionController = require("../controllers/transaction-controller");
 const { userMiddleware } = require("../Middleware/UserMiddleWare");
-
 // create
 router.post("/createTransaction", userMiddleware, transactionController.createTransaction);
 // list
@@ -13,5 +12,7 @@ router.get("/getTransaction/:id", transactionController.getTransactionById);
 router.get("/allcalculations", transactionController.allcalculations)
 
 router.put("/editpayment/:id", transactionController.Editpayment)
+//payment with stripe
+router.post("/pay", transactionController.paymentWithStripe)
 
 module.exports = router;

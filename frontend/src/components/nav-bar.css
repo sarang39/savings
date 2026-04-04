@@ -8,10 +8,9 @@
 
 /* Container */
 .navbar-container {
-
     width: 100%;
     background-color: #111827;
-    color: #ffffff;
+    color: #f7f7f7;
     position: fixed;
     z-index: 1000;
 }
@@ -48,7 +47,7 @@
 /* Dropdown menu */
 .top-menu {
     display: flex;
-    right: 0%;
+    left: 0%;
     gap: 20px;
     flex-direction: column;
     background-color: #334155;
@@ -117,6 +116,22 @@
 @media (max-width:768px) {
     .top button {
         font-size: 8px;
+    }
+
+    .logo {
+        font-size: 8px;
+        font-weight: bold;
+    }
+}
+
+@media (max-width:430px) {
+    .top button {
+        font-size: 4px;
+    }
+
+    .logo {
+        font-size: 8px;
+        font-weight: bold;
     }
 }
 

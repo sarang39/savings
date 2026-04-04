@@ -8,7 +8,10 @@ import { MyContext } from './components/Mycontext';
 import { useState } from 'react';
 import Profile from './components/profile';
 import Payment from './components/payment';
-import MyChart from './components/bar_chart';
+import Success from './components/success';
+import Cancel from './components/cancel';
+
+
 
 
 function App() {
@@ -73,8 +76,10 @@ function App() {
             <Route path='/home' element={<Home />} />
             <Route path='/profile/:id' element={<Profile />} />
             <Route path='/login' element={<Registration />} />
+            <Route path='/success' element={<Success />} />
+            <Route path='/cancel' element={<Cancel />} />
+
             <Route path='/payment/:id' element={<Payment />} />
-            <Route path='/chart' element={<MyChart />} />
           </Routes>
         </BrowserRouter>
       </MyContext.Provider >

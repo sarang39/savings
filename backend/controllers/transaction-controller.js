@@ -1,5 +1,6 @@
 const Transaction = require("../model/transactions");
 const User = require("../model/users");
+const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 //create a new transaction
 const createTransaction = async (req, res) => {
   const { weeklypayment, loan, loanFine } = req.body;
@@ -85,25 +86,7 @@ const allcalculations = async (req, res) => {
     return res.status(500).json({ message: "Server error  at allcalculations" });
   }
 };
-//edit payment
-// const Editpayment = async (req, res) => {
-//   const transactionid = req.params.id
-//   const newdata = req.body.data
-//   try {
-//     const transaction = await Transaction.findOneAndUpdate(transactionid,
-//       { $set: newdata },         // update
-//       { new: true }              // return updated doc
-//     );
-//     console.log(transaction)
-//     if (!transaction) {
-//       return res.status(200).json({ message: "Transaction not found" });
-//     }
-//     res.json(transaction);
-//   } catch (err) {
-//     console.error(err);
-//     res.status(500).json({ message: "Server error" });
-//   }
-// }
+
 const Editpayment = async (req, res) => {
   try {
     const id = req.params.id
@@ -120,4 +103,71 @@ const Editpayment = async (req, res) => {
     res.status(500).json({ message: "server erro while edit payment" })
   }
 }
-module.exports = { createTransaction, getAllTransactions, getTransactionById, allcalculations, Editpayment };
+//payment with stripe
+
+// const paymentWithStripe = async (req, res) => {
+//   const { amount, paymentMethodId } = req.body;
+
+//   const paymentIntent = await stripe.paymentIntents.create({
+//     amount: amount * 100, // amount in cents
+//     currency: "inr",
+//     payment_method: paymentMethodId,
+//     confirm: true,
+//   });
+
+//   res.send(paymentIntent);
+// };
+// const paymentWithStripe = async (req, res) => {
+//   const { amount } = req.body;
+
+//   // const paymentIntent = await stripe.paymentIntents.create({
+//   //   amount: amount * 100,
+//   //   currency: "inr",
+//   // });
+//   try {
+//     const session = await stripe.checkout.sessions.create({
+//       amount: amount * 100,
+//       currency: "inr",
+//     });
+
+//     // res.json({
+//     //   clientSecret: paymentIntent.client_secret,
+//     // });
+//     res.json({ url: session.url });
+//   }
+//   catch (err) {
+//     console.error(err)
+//     res.status(500).json({ message: "Server error while creating Stripe session" });
+//   }
+// };
+const paymentWithStripe = async (req, res) => {
+  console.log("paymentWithStripe called with body:", req.body);
+  const { amount } = req.body;
+
+  try {
+    const session = await stripe.checkout.sessions.create({
+      line_items: [
+        {
+          price_data: {
+            currency: "inr",
+            product_data: {
+              name: "Custom Payment", // Just a simple label for the user's screen
+            },
+            unit_amount: amount * 100,
+          },
+          quantity: 1,
+        },
+      ],
+      mode: "payment",
+      // Notice the ?session_id= added below!
+      success_url: "http://localhost:3000/success?session_id={CHECKOUT_SESSION_ID}",
+      cancel_url: "http://localhost:3000/cancel",
+    });
+
+    res.json({ url: session.url });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server error while creating Stripe session" });
+  }
+};
+module.exports = { createTransaction, getAllTransactions, getTransactionById, allcalculations, Editpayment, paymentWithStripe };

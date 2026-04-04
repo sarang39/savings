@@ -6,7 +6,7 @@ import { useEffect } from "react"
 import { useNavigate } from "react-router-dom";
 import { useState } from "react"
 import Profile from './profile';
-import MyChart from "./bar_chart"
+
 
 
 export default function Home() {
@@ -83,7 +83,7 @@ export default function Home() {
                     </div>
                 ))}
             </div>
-            <MyChart />
+
             <Profile />
             <div style={{ width: '100%', height: '100vh' }} >s
                 {maptransaction.map(item => (

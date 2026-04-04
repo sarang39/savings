@@ -43,13 +43,12 @@
     justify-items: center;
     /* horizontal center */
     align-items: center;
+    column-gap: 20px;
     /* vertical center */
     padding: 3%;
-    row-gap: 2%;
+    row-gap: 10%;
     column-gap: 10%;
 }
-
-
 
 .profile-card:hover {
     transform: translateY(-10px);
@@ -62,14 +61,13 @@
     }
 
     50% {
-        transform: translateY(-10px);
+        transform: translateY(-8px);
     }
 
     100% {
         transform: translateY(0);
     }
 }
-
 
 .profile-card {
     transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -119,4 +117,32 @@
 .profile-location {
     font-size: 14px;
     color: #777;
+}
+
+@media (max-width:727px) {
+    .coverpage>div>h1 {
+        font-size: 250%;
+    }
+
+    .coverpage>div>p {
+        color: #111827;
+        font-size: 50%;
+    }
+
+
+    .profile-image-wrapper {
+        width: 70px;
+        height: 70px;
+        margin: 0 auto 20px auto;
+        border-radius: 50%;
+        overflow: hidden;
+        border: 5px solid #f2f2f2;
+    }
+
+    .profile-card {
+        grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
+        width: 100px;
+        padding: 20px 10px;
+    }
+
 }
