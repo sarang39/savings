@@ -126,7 +126,6 @@ const getProfile = async (req, res) => {
     }
 }
 const getAllUsers = async (req, res) => {
-
     try {
         const users = await User.find().select("-password");
         res.json(users);
@@ -137,6 +136,7 @@ const getAllUsers = async (req, res) => {
 }
 //Admin privileges
 const edituser = async (req, res) => {
+    
     try {
         const userid = req.params.id;
         const newdata = req.body;

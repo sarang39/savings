@@ -23,10 +23,8 @@ const { userMiddleware, multermiddleware, adminpriority } = require("../Middlewa
 router.post("/register", multermiddleware, usercontroller.register);
 router.post("/login", usercontroller.login);
 router.put("/edituser/:id", adminpriority, usercontroller.edituser)
-
 // profile routes require authentication
 router.get("/profile/:id", usercontroller.getProfile);
-
 router.get("/getallusers", usercontroller.getAllUsers);
-
+router.put("/")
 module.exports = router;

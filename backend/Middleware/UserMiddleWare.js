@@ -1,7 +1,5 @@
 const jwt = require("jsonwebtoken")
-
-const JWT_SECRET = "jwtSecret"
-
+const JWT_SECRET =process.env.JWT_SECRET
 const multer = require("multer")
 const fs = require("fs")
 

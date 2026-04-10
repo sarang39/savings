@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 const Transaction = require('./transactions');
-
 const userSchema = new mongoose.Schema({
     name: {
         type: String,
