@@ -94,11 +94,13 @@
     align-items: center;
     gap: 25px;
     padding: 18px 40px;
-    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+    background: linear-gradient(135deg, #e3edf0, #b7c5ca, #3b6070);
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
-    position: sticky;
+    /* position: sticky; */
+    width: 70vw;
+    border-radius: 30px;
     top: 0;
-    z-index: 100;
+    /* z-index: 100; */
 }
 
 .top button {
@@ -115,7 +117,7 @@
 
 @media (max-width:768px) {
     .top button {
-        font-size: 8px;
+        font-size: 11px;
     }
 
     .logo {

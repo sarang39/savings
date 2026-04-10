@@ -5,6 +5,10 @@
 
 }
 
+body {
+  background-color: rgba(40, 44, 52, 0.5);
+}
+
 button {
   font-size: 20%;
 }

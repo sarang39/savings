@@ -10,8 +10,7 @@ import Profile from './components/profile';
 import Payment from './components/payment';
 import Success from './components/success';
 import Cancel from './components/cancel';
-
-
+import Test from './components/Test';
 
 function App() {
   const [userName, setUserName] = useState(null);
@@ -28,7 +27,7 @@ function App() {
   const [userData, setUserData] = useState({})
   const [mapuser, setmapuser] = useState([])
   const [profileData, setProfileData] = useState({})
-  const [form, setform] = useState(1)
+  const [form, setform] = useState(true)
   const [wallet, setwallet] = useState([])
   const [addpayment, setaddpayment] = useState(false);
   const [profit, setprofit] = useState()
@@ -60,15 +59,11 @@ function App() {
     setOtp
   }
   return (
-    <>
+    < div style={{}}>
       <MyContext.Provider value={value}>
         <BrowserRouter>
           <Nav />
           <div style={{
-            padding: " 48px",
-
-
-
           }}></div>
           < Routes >
             <Route path='/registration' element={<Registration />} />
@@ -77,13 +72,12 @@ function App() {
             <Route path='/login' element={<Registration />} />
             <Route path='/success/:id' element={<Success />} />
             <Route path='/cancel/:id' element={<Cancel />} />
-
+            <Route path='/test' element={<Test />} />
             <Route path='/payment/:id' element={<Payment />} />
           </Routes>
         </BrowserRouter>
       </MyContext.Provider >
-    </>
+    </div>
   );
-}
-
+};
 export default App;

@@ -55,15 +55,16 @@ export default function Nav() {
                 > ⚙️
                 </button>
                 <nav className="top">
+                    <button onClick={() => navigate('/home')}>Home</button>
+                    <button onClick={() => navigate('/registration')}>Registration</button>
+                    <button onClick={() => navigate('/registration')}>Login</button>
+                    <button onClick={() => { edit === 1 ? setedit(0) : setedit(1) }}>Edit profile</button>
+                    <button onClick={() => navigate('/payment')}>Payment</button>
+                    <button onClick={() => navigate('/test')}>Test</button>
                     <button onClick={() => profile()}>Profile</button>
-
-                    <button onClick={() => registration()}>Registration</button>
                     <button onClick={() => login()}>{showMenu ? 'true' : 'false'}</button>
                     <button onClick={() => login()}>Login</button>
-                    <button onClick={() => navigate('/home')}>Home</button>
                     <button onClick={() => navigate(`/payment/${id}`)}>Payment</button>
-                    <button >contact</button>
-                    <button >about</button>
                 </nav>
                 <button
                     className="settings-btn"
@@ -78,6 +79,15 @@ export default function Nav() {
                     <button onClick={() => navigate('/registration')}>Login</button>
                     <button onClick={() => { edit === 1 ? setedit(0) : setedit(1) }}>Edit profile</button>
                     <button onClick={() => navigate('/payment')}>Payment</button>
+                    <button onClick={() => navigate('/test')}>Test</button>
+                    <button >contact</button>
+                    <button >about</button>
+                    <button onClick={() => profile()}>Profile</button>
+                    <button onClick={() => registration()}>Registration</button>
+                    <button onClick={() => login()}>{showMenu ? 'true' : 'false'}</button>
+                    <button onClick={() => login()}>Login</button>
+                    <button onClick={() => navigate('/home')}>Home</button>
+                    <button onClick={() => navigate(`/payment/${id}`)}>Payment</button>
                     <button >contact</button>
                     <button >about</button>
                 </nav>
