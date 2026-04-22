@@ -10,6 +10,7 @@ export default function Profile() {
     const navigate = useNavigate();
     const [newWeeklyPayment, setNewWeeklyPayment] = useState(0)
     const [newname, setnewname] = useState()
+    const [payment, setpayment] = useState(50)
     const token = localStorage.getItem("AuthToken");
     const {
         userData,
@@ -37,6 +38,7 @@ export default function Profile() {
             console.log(err)
         }
     }
+
     async function usertrnsation() {
         try {
             const response = await axios.get(`https://savings-hndc.onrender.com/api/transactions/gettransaction/${id}`, {
@@ -61,9 +63,7 @@ export default function Profile() {
         }
         console.log("transaction data", transactonData)
     }
-    async function RePay() {
-        const response = axios.put(`https://savings-hndc.onrender.com/api/transactions/editpayment/${id}`, { weeklypayment: newWeeklyPayment })
-    }
+
     async function Edituser() {
         try {
             const response = await axios.put(`https://savings-hndc.onrender.com/api/users/edituser/${id}`, { name: newname }, {
@@ -73,6 +73,25 @@ export default function Profile() {
                 alert("successfully changed")
                 setedit(0)
                 // getProfileANDtransactions();
+            }
+        }
+        catch (err) {
+        }
+    }
+    //re-payment
+    async function RePay(id) {
+        try {
+            const response = await axios.put(`https://savings-hndc.onrender.com/api/transactions/editpayment/${id}`,
+                {
+                    weeklypayment: payment,
+                    paymentid: id
+                },
+                {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
+            if (response.status === 200) {
+                alert("successfully changed")
+
             }
         }
         catch (err) {
@@ -142,7 +161,6 @@ export default function Profile() {
                             </div>
                         </div>
                         <div className="transaction-details">
-
                             <p>transaction details</p>
                             <table className="transaction-table">
                                 <tr>
@@ -150,25 +168,28 @@ export default function Profile() {
                                     <th>Amount</th>
                                     <th>Fine</th>
                                     <th>Loan</th>
-                                    <th><button onClick={() => (setaddpayment(true))}>⚙️{console.log(addpayment)}</button></th>
+                                    <th><button style={{ width: '50%', height: '100%', fontSize: "1rem" }} onClick={() => (setaddpayment(true))}>⚙️{console.log(addpayment)}</button>
+
+                                    </th>
                                 </tr>
+                                {
+                                    transactonData.map((item) => (
+                                        <tr
+                                            key={item._id}>
+                                            <td>{item.date.split('T')[0]}</td>
+                                            <td>{item.weeklypayment}</td>
+                                            <td>{item.weeklypaymentfine}</td>
+                                            <td>{item.loan}</td>
+                                            {addpayment && item.weeklypayment === 0 ?
+                                                <td style={{ display: "flex", gap: '10px' }} >
+                                                    <button style={{ width: '50%', height: '100%', fontSize: "1rem" }} >Delete</button>
+                                                    <button style={{ width: '50%', height: '100%', fontSize: "1rem" }} onClick={() => RePay(item._id)} >Re-pay{item._id}</button></td>
+                                                :
+                                                <td>
 
-                                {addpayment ? <div></div> : <div></div>}
-                                {transactonData.map((item) => (
-                                    <tr
-                                        key={item._id}>
-                                        <td>{item.date.split('T')[0]}</td>
-                                        <td>{item.weeklypayment}</td>
-                                        <td>{item.weeklypaymentfine}</td>
-                                        <td>{item.loan}</td>
-                                        {addpayment && item.weeklypayment === 0 ?
-                                            <td ><button onClick={() => navigate(`/payment/${item._id}`)} >Re-pay</button></td>
-                                            :
-                                            <td>
-
-                                            </td>}
-                                    </tr>
-                                ))}
+                                                </td>}
+                                        </tr>
+                                    ))}
                             </table>
                         </div>
                     </div>

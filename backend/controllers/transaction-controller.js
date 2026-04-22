@@ -89,7 +89,7 @@ const allcalculations = async (req, res) => {
 
 const Editpayment = async (req, res) => {
   try {
-    const id = req.params.id
+    const id = req.body.paymentid
     const User_and_paymentData = req.body
     const update = await Transaction.findByIdAndUpdate(id, {
       weeklypayment: User_and_paymentData.weeklypayment

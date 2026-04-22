@@ -126,7 +126,7 @@ export default function Home() {
             </div>
 
 
-            <div style={{ width: '100%', height: '100vh' }} >s
+            <div style={{ width: '100%', height: '100vh' }} >
 
             </div>
         </div >

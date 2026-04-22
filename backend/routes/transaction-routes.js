@@ -12,7 +12,7 @@ router.get("/getTransaction/:id", transactionController.getTransactionById);
 router.get("/allcalculations", transactionController.allcalculations)
 
 router.put("/editpayment/:id", transactionController.Editpayment)
-//payment with stripe
+//paymentp with stripe
 router.post("/pay", transactionController.paymentWithStripe)
 
-module.exports = router;
+module.exports = router
