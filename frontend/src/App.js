@@ -75,6 +75,7 @@ function App() {
             <Route path='/test' element={<Test />} />
             <Route path='/payment/:id' element={<Payment />} />
           </Routes>
+
         </BrowserRouter>
       </MyContext.Provider >
     </div>

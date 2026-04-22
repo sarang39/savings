@@ -55,6 +55,20 @@ export default function Home() {
     }
     return (
         <div>
+            <div className="start">
+                <div >
+                    <h1>THE JOURNEY OF OUR TEAM</h1>
+                    <p>This project is a Web-Based Savings Management System developed using the MERN Stack The system is based
+                        on a real-world idea where a group of friends save an amount per week for two years.
+                        The main aim of the application is to digitally manage, track, and monitor weekly savings in a transparent and organized way.
+                    </p>
+                </div>
+                <div >
+                    <div className="forimage">
+                    </div>
+                    <div className="forimagebackground"></div>
+                </div>
+            </div>
             <div className="coverpage">
                 <div>
                     <h1>Save For Tomorrow </h1>
@@ -66,9 +80,15 @@ export default function Home() {
             </div>
             <div style={{ height: '30vmin', width: "100%" }} >
             </div>
-            <div className="parant-profile-cards">
+            <div className="parant-profile-cards" style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+                gap: '2rem',
+                padding: '1.5rem',
+                alignItems: 'start'
+            }} >
                 {mapuser.map((item) => (
-                    <div key={item._id} className="profile-card" onClick={() => profile_disply(item._id)}>
+                    <div key={item._id} className="profile-card" style={{ marginBottom: '20px' }} onClick={() => profile_disply(item._id)}>
                         <div className="profile-image-wrapper">
                             <img
                                 src={
@@ -86,7 +106,7 @@ export default function Home() {
                 ))}
             </div>
 
-            <Profile />
+
             <div style={{ width: '100%', height: '100vh' }} >s
                 {maptransaction.map(item => (
                     < div >

@@ -1,29 +1,9 @@
-// import "./nav-bar.css";
-// import { useNavigate } from "react-router-dom";
 
-// export default function Nav() {
-//     const navigate = useNavigate();
-
-//     return (
-//         <div className="navbar-container">
-//             <input type="checkbox" id="menu-toggle" />
-//             <label htmlFor="menu-toggle" className="menu-icon">&#9776;</label>
-
-//             <nav className="sidebar">
-//                 <h2 className="logo">MyApp</h2>
-//                 <button onClick={() => navigate('/profile')}>Profile</button>
-//                 <button onClick={() => navigate('/home')}>Home</button>
-//                 <button onClick={() => navigate('/registration')}>Registration</button>
-//             </nav>
-//         </div>
-//     );
-// }
 import "./nav-bar.css";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useContext } from "react";
 import { MyContext } from "./Mycontext";
-
 export default function Nav() {
     const token = localStorage.getItem("AuthToken");
     const navigate = useNavigate();
@@ -49,28 +29,23 @@ export default function Nav() {
     return (
         <div className="navbar-container">
             <div className="top-bar">
-                <button
-                    className="settings-btn"
-                    onClick={() => setShowMenu(!showMenu)}
-                > ⚙️
-                </button>
-                <nav className="top">
-                    <button onClick={() => navigate('/home')}>Home</button>
-                    <button onClick={() => navigate('/registration')}>Registration</button>
-                    <button onClick={() => navigate('/registration')}>Login</button>
-                    <button onClick={() => { edit === 1 ? setedit(0) : setedit(1) }}>Edit profile</button>
-                    <button onClick={() => navigate('/payment')}>Payment</button>
-                    <button onClick={() => navigate('/test')}>Test</button>
-                    <button onClick={() => profile()}>Profile</button>
-                    <button onClick={() => login()}>{showMenu ? 'true' : 'false'}</button>
-                    <button onClick={() => login()}>Login</button>
-                    <button onClick={() => navigate(`/payment/${id}`)}>Payment</button>
-                </nav>
-                <button
-                    className="settings-btn"
-                    onClick={() => setShowMenu(!showMenu)}
-                > ⚙️
-                </button>
+                <div style={{ display: 'flex', justifyContent: "space-between" }}>
+                    <div style={{ width: "10vw" }} >
+                        <button
+                            className="settings-btn"
+                            onClick={() => setShowMenu(!showMenu)}
+                        > ⚙️
+                        </button>
+                    </div>
+                    <nav className="top">
+                        <button onClick={() => navigate('/home')}>Home</button>
+                        <button onClick={() => navigate('/test')}>Test</button>
+                        <button onClick={() => profile()}>Profile</button>
+                        <button onClick={() => login()}>Login</button>
+
+                    </nav>
+                </div>
+
             </div>
             {showMenu && (
                 <nav className="top-menu">

@@ -2,8 +2,6 @@ import axios from "axios";
 import "./profile.css";
 import { useContext, useEffect, useState } from "react";
 import { MyContext } from "./Mycontext";
-import "./home.css";
-import "./registration.css";
 import photo1 from "./images/Screenshot 2026-03-19 122942.png"
 import photo2 from "./images/Screenshot 2026-03-19 123007.png"
 import photo3 from "./images/Screenshot 2026-03-19 123023.png"
@@ -74,11 +72,10 @@ export default function Profile() {
         totaldetails()
     }, [id]);
     return (
-        <div>
+        <div style={{
+            paddingTop: '20px'
+        }} >
             <div >
-
-
-
             </div>
             {edit === 0 ? (
 
@@ -134,7 +131,7 @@ export default function Profile() {
                             </div>
                         </div>
                         <div className="transaction-details">
-                            <p>rating</p>
+
                             <p>transaction details</p>
                             <table className="transaction-table">
                                 <tr>
@@ -144,7 +141,7 @@ export default function Profile() {
                                     <th>Loan</th>
                                     <th><button onClick={() => (setaddpayment(true))}>⚙️{console.log(addpayment)}</button></th>
                                 </tr>
-                                {/* {addpayment ? (): ()} */}
+
                                 {addpayment ? <div></div> : <div></div>}
                                 {transactonData.map((item) => (
                                     <tr

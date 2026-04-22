@@ -1,3 +1,18 @@
+.start>div>h1 {
+
+    font-size: 450%;
+}
+
+.start>div {
+    height: 100%;
+    width: 50%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    padding-left: 2%;
+}
+
 .coverpage {
     background-color: #F5F5F5;
     height: 90vh;
@@ -37,24 +52,6 @@
     padding: 0%;
 }
 
-.parant-profile-cards {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    justify-items: center;
-    /* horizontal center */
-    align-items: center;
-    column-gap: 20px;
-    /* vertical center */
-    padding: 3%;
-    row-gap: 10%;
-    column-gap: 10%;
-}
-
-.profile-card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
-}
-
 @keyframes moveUpDown {
     0% {
         transform: translateY(0);
@@ -69,55 +66,6 @@
     }
 }
 
-.profile-card {
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
-    animation: moveUpDown 2s infinite;
-    /* 2s = 1s up + 1s down */
-    width: 300px;
-    padding: 40px 20px;
-    background: #ffffff;
-    border-radius: 20px;
-    text-align: center;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-}
-
-.profile-image-wrapper {
-    width: 140px;
-    height: 140px;
-    margin: 0 auto 20px auto;
-    border-radius: 50%;
-    overflow: hidden;
-    border: 5px solid #f2f2f2;
-}
-
-.profile-image-wrapper img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-/* NAME */
-.profile-name {
-    font-size: 22px;
-    font-weight: 600;
-    margin-bottom: 8px;
-    color: #222;
-}
-
-/* ROLE */
-.profile-role {
-    font-size: 15px;
-    font-weight: 500;
-    color: #00a3c4;
-    margin-bottom: 6px;
-}
-
-/* LOCATION */
-.profile-location {
-    font-size: 14px;
-    color: #777;
-}
 
 @media (max-width:727px) {
     .coverpage>div>h1 {
@@ -130,19 +78,70 @@
     }
 
 
-    .profile-image-wrapper {
-        width: 70px;
-        height: 70px;
-        margin: 0 auto 20px auto;
-        border-radius: 50%;
-        overflow: hidden;
-        border: 5px solid #f2f2f2;
+    .start>div>h1 {
+        font-size: 250%;
     }
 
-    .profile-card {
-        grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
-        width: 100px;
-        padding: 20px 10px;
+    .start>div>p {
+
+        font-size: 50%;
     }
 
+}
+
+
+
+
+
+.start {
+    width: 100vw;
+    height: 100vh;
+    background-color: #111827;
+    color: #f2f2f2;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.start>div {
+    padding: 5%;
+    width: 50%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    position: relative;
+}
+
+.forimagebackground {
+    position: absolute;
+    border-radius: 10px;
+    width: 30vmax;
+    height: 30vmax;
+    z-index: 1;
+    background-image: url("./images/richman.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+
+}
+
+.forimage {
+    position: absolute;
+    width: 30vmax;
+    height: 30vmax;
+    z-index: 2;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.08);
+
+
+}
+
+.forimagebackground:hover {
+
+    background-color: #00a3c4;
+    width: 32vmax;
+    height: 32vmax;
+    transform: translateY(-100px);
 }
