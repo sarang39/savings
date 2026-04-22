@@ -87,6 +87,10 @@
         font-size: 50%;
     }
 
+    .counter-section {
+        flex-direction: column;
+    }
+
 }
 
 
@@ -144,4 +148,58 @@
     width: 32vmax;
     height: 32vmax;
     transform: translateY(-100px);
+}
+
+
+/* Section */
+.counter-section {
+    height: 100vh;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+/* Cards */
+.counter-box {
+    padding: 30px;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    width: 250px;
+    margin-bottom: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+/* Number animation */
+.number {
+    font-size: 3rem;
+    font-weight: bold;
+    background: linear-gradient(45deg, #38bdf8, #6366f1);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+
+    opacity: 0;
+    transform: translateY(30px);
+    animation: fadeUp 1s ease forwards;
+}
+
+/* Delay each */
+.counter-box:nth-child(1) .number {
+    animation-delay: 0.2s;
+}
+
+.counter-box:nth-child(2) .number {
+    animation-delay: 0.6s;
+}
+
+.counter-box:nth-child(3) .number {
+    animation-delay: 1s;
+}
+
+/* Animation */
+@keyframes fadeUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }

@@ -57,16 +57,11 @@ export default function Payment() {
 
     // Implement payment logic here
     return (
-        <div className="paymentcontainer" >
-            <div >
+        <div className="paymentcontainer"  >
+            <div style={{ borderRadius: "25px" }} >
                 <form className="form" >
-                    <input type="number" onChange={(e) => { setpayment(e.target.value) }} />
-                    <input type="number" />
-                    <input type="number" />
-                    <input type="number"
-                    />
-                    <button type="submit" onClick={(e) => addtransaction(e)} > "weeklypayment": {payment}</button>
-                    <button type="submit" onClick={(e) => addpaymentS(e)} > "wjjjeeklypayment for": {payment}</button>
+                    <input type="amount" onChange={(e) => { setpayment(e.target.value) }} placeholder='Enter the amont' />
+                    <button type="submit" onClick={(e) => addpaymentS(e)} >Pay Weeklypayment for: {payment}</button>
                 </form>
             </div>
         </div >

@@ -31,6 +31,7 @@ function App() {
   const [wallet, setwallet] = useState([])
   const [addpayment, setaddpayment] = useState(false);
   const [profit, setprofit] = useState()
+  const [transactonData, settransactionData] = useState([])
   const value = {
     addpayment, setaddpayment,
     profit, setprofit,
@@ -56,7 +57,9 @@ function App() {
     photo,
     setphoto,
     otp,
-    setOtp
+    setOtp,
+    transactonData,
+    settransactionData
   }
   return (
     < div style={{}}>

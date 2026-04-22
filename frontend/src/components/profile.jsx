@@ -11,8 +11,19 @@ export default function Profile() {
     const [newWeeklyPayment, setNewWeeklyPayment] = useState(0)
     const [newname, setnewname] = useState()
     const token = localStorage.getItem("AuthToken");
-    const { userData, setUserData, edit, setedit, wallet, setwallet, addpayment, setaddpayment, profit, setprofit } = useContext(MyContext)
-    const [transactonData, settransactionData] = useState([])
+    const {
+        userData,
+        setUserData,
+        edit,
+        setedit,
+        wallet,
+        setwallet,
+        addpayment,
+        setaddpayment,
+        transactonData,
+        settransactionData
+    }
+        = useContext(MyContext)
     const { id } = useParams()
     const totalAmount = transactonData.reduce(
         (sum, item) => sum + item.weeklypayment, 0

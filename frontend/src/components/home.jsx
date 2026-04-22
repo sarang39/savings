@@ -12,7 +12,10 @@ import Profile from './profile';
 export default function Home() {
     const [maptransaction, setmaptransaction] = useState([])
     const navigate = useNavigate();
-    const { mapuser, setmapuser } = useContext(MyContext)
+    const { mapuser, setmapuser, transactonData } = useContext(MyContext)
+    const totalAmount = transactonData.reduce(
+        (sum, item) => sum + item.weeklypayment, 0
+    );
     function profile_disply(id) {
         navigate(`/profile/${id}`)
     }
@@ -69,6 +72,22 @@ export default function Home() {
                     <div className="forimagebackground"></div>
                 </div>
             </div>
+            <section class="counter-section" >
+                <div class="counter-box">
+                    <div class="number">7</div>
+                    <p>Users</p>
+                </div>
+
+                <div class="counter-box">
+                    <div class="number">{totalAmount}</div>
+                    <p>Total Amount</p>
+                </div>
+
+                <div class="counter-box">
+                    <div class="number">9800</div>
+                    <p>Total Fine Amount</p>
+                </div>
+            </section>
             <div className="coverpage">
                 <div>
                     <h1>Save For Tomorrow </h1>
@@ -108,13 +127,7 @@ export default function Home() {
 
 
             <div style={{ width: '100%', height: '100vh' }} >s
-                {maptransaction.map(item => (
-                    < div >
-                        <button>{item.weeklypayment}</button>
-                        <h1>{item.weeklypayment}</h1>
-                    </div>
 
-                ))}
             </div>
         </div >
     )
