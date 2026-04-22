@@ -90,7 +90,9 @@ export default function Profile() {
                     headers: { Authorization: `Bearer ${token}` }
                 });
             if (response.status === 200) {
-                alert("successfully changed")
+                getProfileANDtransactions();
+                alert("successfully changed");
+
 
             }
         }
