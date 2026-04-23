@@ -4,12 +4,14 @@ import { MyContext } from "./Mycontext"
 import axios from "axios"
 import { useEffect } from "react"
 import { useNavigate } from "react-router-dom";
-import { useState } from "react"
+import { useState } from "react";
+import { useParams } from "react-router-dom";
 import Profile from './profile';
 
 
 
 export default function Home() {
+    const { id } = useParams();
     const [maptransaction, setmaptransaction] = useState([])
     const navigate = useNavigate();
     const { mapuser, setmapuser, transactonData } = useContext(MyContext)

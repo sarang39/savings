@@ -2,13 +2,13 @@ import axios from "axios";
 import "./profile.css";
 import { useContext, useEffect, useState } from "react";
 import { MyContext } from "./Mycontext";
+import { useNavigate } from "react-router-dom";
 import photo1 from "./images/Screenshot 2026-03-19 122942.png"
 import photo2 from "./images/Screenshot 2026-03-19 123007.png"
 import photo3 from "./images/Screenshot 2026-03-19 123023.png"
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 export default function Profile() {
     const navigate = useNavigate();
-    const [newWeeklyPayment, setNewWeeklyPayment] = useState(0)
     const [newname, setnewname] = useState()
     const [payment, setpayment] = useState(50)
     const token = localStorage.getItem("AuthToken");
@@ -109,35 +109,45 @@ export default function Profile() {
         }} >
             <div >
             </div>
+            <div>
+                <button>Edit</button>
+                <button>Add Money</button>
+            </div>
             {edit === 0 ? (
 
                 <div className="details">
+                    <div>
 
-                    <div className="left">
-                        <div className="profile-card">
-                            {userData && typeof userData === 'object' ?
-                                (
-                                    <div>
-                                        <div className="profile-image-wrapper">
-                                            {console.log("photo path", userData.photo)}<img
-                                                src={
-                                                    userData.photo
-                                                        ? userData.photo
-                                                        : "https://www.shutterstock.com/image-vector/default-avatar-profile-icon-transparent-600nw-2463868847.jpg"
-                                                }
-                                                alt="profile" />
-                                        </div>
+                        <div className="left">
+                            <div className="profile-card">
+                                {userData && typeof userData === 'object' ?
+                                    (
                                         <div>
-                                            <h2 className="profile-name">{userData.name}</h2>
-                                            <p className="profile-role">{userData.email}</p>
-                                            <p className="profile-email">{userData._id}</p>
-                                            <p className="profile-phone">{userData.phonenumber}</p>
-                                            <p className="profile-location">New York, NY</p>
+                                            <div className="profile-image-wrapper">
+                                                {console.log("photo path", userData.photo)}<img
+                                                    src={
+                                                        userData.photo
+                                                            ? userData.photo
+                                                            : "https://www.shutterstock.com/image-vector/default-avatar-profile-icon-transparent-600nw-2463868847.jpg"
+                                                    }
+                                                    alt="profile" />
+                                            </div>
+                                            <div>
+                                                <h2 className="profile-name">{userData.name}</h2>
+                                                <p className="profile-role">{userData.email}</p>
+                                                <p className="profile-phone">{userData.phonenumber}</p>
+                                                <p className="profile-location">New York, NY</p>
+                                            </div>
+
+
                                         </div>
-                                    </div>
-                                ) : (
-                                    <p>Loading...</p>
-                                )}
+                                    ) : (
+                                        <p>Loading...</p>
+                                    )}
+                            </div>
+                            <div style={{ marginTop: '20px', backgroundColor: '#f0f0f0', padding: '20px', borderRadius: '10px' }}>
+                                <button onClick={() => navigate(`/payment/${token._id}`)}>Payment</button>
+                            </div>
                         </div>
                     </div>
                     <div className="right">
@@ -170,8 +180,9 @@ export default function Profile() {
                                     <th>Amount</th>
                                     <th>Fine</th>
                                     <th>Loan</th>
-                                    <th><button style={{ width: '50%', height: '100%', fontSize: "1rem" }} onClick={() => (setaddpayment(true))}>⚙️{console.log(addpayment)}</button>
-
+                                    <th>
+                                        <button style={{ width: '50%', height: '100%', fontSize: "1rem" }} onClick={() => (setaddpayment(true))}>⚙️{console.log(addpayment)}
+                                        </button>
                                     </th>
                                 </tr>
                                 {
@@ -233,6 +244,8 @@ export default function Profile() {
                     </div>
                 </div >)
             }
+            <div> </div>
+
         </div >
     )
 }
