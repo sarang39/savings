@@ -95,8 +95,18 @@ export default function Profile() {
 
 
             }
+            if (response.status === 403) {
+                alert("Your not admin");
+
+
+            }
         }
         catch (err) {
+            if (err.status === 403) {
+                alert("Your not admin");
+
+
+            }
         }
     }
     useEffect(() => {
@@ -145,9 +155,7 @@ export default function Profile() {
                                         <p>Loading...</p>
                                     )}
                             </div>
-                            <div style={{ marginTop: '20px', backgroundColor: '#f0f0f0', padding: '20px', borderRadius: '10px' }}>
-                                <button onClick={() => navigate(`/payment/${token._id}`)}>Payment</button>
-                            </div>
+
                         </div>
                     </div>
                     <div className="right">
