@@ -7,7 +7,7 @@ import { MyContext } from "./Mycontext";
 export default function Nav() {
     const token = localStorage.getItem("AuthToken");
     const navigate = useNavigate();
-    const { profileData, edit, setedit, setform } = useContext(MyContext)
+    const { profileData, edit, setedit, setform, userData, } = useContext(MyContext)
     const [showMenu, setShowMenu] = useState(false);
     const id = localStorage.getItem("id");
 
@@ -39,9 +39,24 @@ export default function Nav() {
                         </div>
                         <nav className="top">
                             <button onClick={() => navigate('/home')}>Home</button>
-                            <button onClick={() => navigate('/test')}>Test</button>
-                            <button onClick={() => profile()}>Profile</button>
+
                             <button onClick={() => login()}>Login</button>
+                            <button onClick={() => profile()} style={{ borderRadius: '100%', aspectRatio: '1/1', padding: "0%", border: '0%', margin: '0%' }}>
+                                {userData && typeof userData === 'object' ?
+                                    (
+
+                                        <img className="ring"
+                                            style={{ objectFit: "cover", width: "100%", height: '100%', borderRadius: '100%', aspectRatio: '1/1', padding: "3%", }}
+                                            src={
+                                                userData.photo
+                                                    ? userData.photo
+                                                    : "https://www.shutterstock.com/image-vector/default-avatar-profile-icon-transparent-600nw-2463868847.jpg"
+                                            }
+                                            alt="profile" />
+
+                                    ) : (
+                                        <p>Loading...</p>
+                                    )}</button>
 
                         </nav>
                     </div>
@@ -54,7 +69,6 @@ export default function Nav() {
                         <button onClick={() => navigate('/registration')}>Login</button>
                         <button onClick={() => { edit === 1 ? setedit(0) : setedit(1) }}>Edit profile</button>
                         <button onClick={() => navigate('/payment')}>Payment</button>
-                        <button onClick={() => navigate('/test')}>Test</button>
                         <button >contact</button>
                         <button >about</button>
                         <button onClick={() => profile()}>Profile</button>
@@ -75,7 +89,6 @@ export default function Nav() {
                     bottom: "3%",
                     right: "3%",
                     zIndex: 100,
-
                     width: "70px",
                     height: "70px",
                     borderRadius: "50%",

@@ -10,7 +10,7 @@ import Profile from './components/profile';
 import Payment from './components/payment';
 import Success from './components/success';
 import Cancel from './components/cancel';
-import Test from './components/Test';
+
 
 function App() {
   const [userName, setUserName] = useState(null);
@@ -61,7 +61,7 @@ function App() {
     transactonData,
     settransactionData
   }
-  
+
   return (
     < div style={{}}>
       <MyContext.Provider value={value}>
@@ -76,7 +76,7 @@ function App() {
             <Route path='/login' element={<Registration />} />
             <Route path='/success/:id' element={<Success />} />
             <Route path='/cancel/:id' element={<Cancel />} />
-            <Route path='/test' element={<Test />} />
+
             <Route path='/payment/:id' element={<Payment />} />
           </Routes>
 

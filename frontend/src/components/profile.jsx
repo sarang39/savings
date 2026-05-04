@@ -7,10 +7,24 @@ import photo1 from "./images/Screenshot 2026-03-19 122942.png"
 import photo2 from "./images/Screenshot 2026-03-19 123007.png"
 import photo3 from "./images/Screenshot 2026-03-19 123023.png"
 import { useParams } from "react-router-dom";
+import { PieChart, Pie, Cell, Tooltip } from "recharts";
+
 export default function Profile() {
+
+
+
+    const COLORS = ["#8b5cf6", "#3b82f6", "#10b981", "#f59e0b", "#6b7280"];
+
     const navigate = useNavigate();
     const [newname, setnewname] = useState()
     const [payment, setpayment] = useState(50)
+    const [graphdata, setgraphdata] = useState([
+        { name: "Housing", value: 1450 },
+        { name: "Food", value: 850 },
+        { name: "Transport", value: 620 },
+        { name: "Entertainment", value: 480 },
+        { name: "Others", value: 830 },
+    ])
     const token = localStorage.getItem("AuthToken");
     const {
         userData,
@@ -33,6 +47,13 @@ export default function Profile() {
         try {
             const response = await axios.get("https://savings-hndc.onrender.com/api/transactions/allcalculations")
             setwallet(response.data.wallet)
+            setgraphdata([
+                { name: "weekly payment total:", value: response.data.weeklypaymenttotal },
+                { name: "weekly payment fine total", value: response.data.weeklypaymentfine },
+                { name: "wallet", value: response.data.wallet },
+
+            ])
+
         }
         catch (err) {
             console.log(err)
@@ -127,7 +148,6 @@ export default function Profile() {
 
                 <div className="details">
                     <div>
-
                         <div className="left">
                             <div className="profile-card">
                                 {userData && typeof userData === 'object' ?
@@ -148,14 +168,40 @@ export default function Profile() {
                                                 <p className="profile-phone">{userData.phonenumber}</p>
                                                 <p className="profile-location">New York, NY</p>
                                             </div>
-
-
                                         </div>
                                     ) : (
                                         <p>Loading...</p>
                                     )}
                             </div>
+                        </div>
+                        <div style={{
+                            width: "350px",
+                            height: "350px",
+                            background: "#0f172a",
+                            borderRadius: "20px",
+                            padding: "20px",
+                            color: "white",
+                            marginTop: "20px"
+                        }}>
+                            <h3>Amount Overview</h3>
 
+                            <PieChart width={300} height={300}>
+                                <Pie
+                                    data={graphdata}
+                                    cx="50%"
+                                    cy="50%"
+                                    innerRadius={70}   // makes it donut
+                                    outerRadius={100}
+                                    paddingAngle={3}
+                                    dataKey="value"
+                                >
+                                    {graphdata.map((entry, index) => (
+                                        <Cell key={index} fill={COLORS[index]} />
+                                    ))}
+                                </Pie>
+
+                                <Tooltip />
+                            </PieChart>
                         </div>
                     </div>
                     <div className="right">
@@ -207,8 +253,8 @@ export default function Profile() {
                                                     <button style={{ width: '50%', height: '100%', fontSize: "1rem" }} onClick={() => RePay(item._id)} >Re-pay{item._id}</button></td>
                                                 :
                                                 <td>
-
-                                                </td>}
+                                                </td>
+                                            }
                                         </tr>
                                     ))}
                             </table>

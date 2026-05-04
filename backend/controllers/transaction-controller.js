@@ -75,7 +75,8 @@ const allcalculations = async (req, res) => {
       weeklypaymentfinetotal: result[0]?.weeklypaymentfinetotal || 0,
       lonefinetotal: result[0]?.lonefinetotal || 0,
       total: result[0]?.lonefinetotal + result[0]?.weeklypaymentfinetotal + result[0]?.weeklypaymenttotal || 0,
-      wallet: (result[0]?.lonefinetotal + result[0]?.weeklypaymentfinetotal + result[0]?.weeklypaymenttotal || 0) / count
+      wallet: (result[0]?.lonefinetotal + result[0]?.weeklypaymentfinetotal + result[0]?.weeklypaymenttotal || 0) / count,
+      totaluser: count
 
     }
     return res.status(201).json(data);
@@ -107,19 +108,16 @@ const Editpayment = async (req, res) => {
 
 // const paymentWithStripe = async (req, res) => {
 //   const { amount, paymentMethodId } = req.body;
-
 //   const paymentIntent = await stripe.paymentIntents.create({
 //     amount: amount * 100, // amount in cents
 //     currency: "inr",
 //     payment_method: paymentMethodId,
 //     confirm: true,
 //   });
-
 //   res.send(paymentIntent);
 // };
 // const paymentWithStripe = async (req, res) => {
 //   const { amount } = req.body;
-
 //   // const paymentIntent = await stripe.paymentIntents.create({
 //   //   amount: amount * 100,
 //   //   currency: "inr",
@@ -129,7 +127,6 @@ const Editpayment = async (req, res) => {
 //       amount: amount * 100,
 //       currency: "inr",
 //     });
-
 //     // res.json({
 //     //   clientSecret: paymentIntent.client_secret,
 //     // });
@@ -143,7 +140,6 @@ const Editpayment = async (req, res) => {
 const paymentWithStripe = async (req, res) => {
   console.log("paymentWithStripe called with body:", req.body);
   const { amount } = req.body;
-
   try {
     const session = await stripe.checkout.sessions.create({
       line_items: [
@@ -163,7 +159,6 @@ const paymentWithStripe = async (req, res) => {
       success_url: "http://localhost:3000/success?session_id={CHECKOUT_SESSION_ID}",
       cancel_url: "http://localhost:3000/cancel",
     });
-
     res.json({ url: session.url });
   } catch (err) {
     console.error(err);
