@@ -80,6 +80,18 @@ export default function Profile() {
         }
         console.log("transaction data", transactonData)
     }
+    async function getProfilepermenet() {
+        try {
+            const response = await axios.get(`https://savings-hndc.onrender.com/api/users/profile`, {
+                headers: { Authorization: `Bearer ${token}` }
+            })
+            console.log("profile response:::", response.data);
+        }
+        catch (err) {
+            console.error("error fetching profile", err);
+        }
+        console.log("transaction data", transactonData)
+    }
 
     async function Edituser() {
         try {
@@ -89,7 +101,7 @@ export default function Profile() {
             if (response.status === 200) {
                 alert("successfully changed")
                 setedit(0)
-                // getProfileANDtransactions();
+
             }
         }
         catch (err) {
@@ -128,6 +140,7 @@ export default function Profile() {
     }
     useEffect(() => {
         getProfileANDtransactions();
+        getProfilepermenet();
         totaldetails()
     }, [id]);
     return (

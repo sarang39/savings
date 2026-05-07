@@ -32,6 +32,7 @@ export default function Nav() {
             window.removeEventListener("scroll", handleScroll);
         };
     }, []);
+
     return (
         <div>
             <div className="navbar-container">
