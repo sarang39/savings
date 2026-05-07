@@ -15,7 +15,9 @@ export default function Home() {
     const [maptransaction, setmaptransaction] = useState([])
     const [dashborddata, setdashborddata] = useState([])
     const navigate = useNavigate();
-    const { mapuser, setmapuser, transactonData } = useContext(MyContext)
+    const { mapuser, setmapuser, transactonData, isAdmin, setIsAdmin, userData,
+        setUserData } = useContext(MyContext)
+    const token = localStorage.getItem("token");
     const totalAmount = transactonData.reduce(
         (sum, item) => sum + item.weeklypayment, 0
     );
@@ -27,6 +29,7 @@ export default function Home() {
             await Featchuser();
             await GetAlltransactions();
             await totaldetails();
+            await fetchUserData();
         };
 
         loadData();
@@ -37,6 +40,35 @@ export default function Home() {
     useEffect(() => {
         console.log("mapuser updated:", mapuser)
     }, [mapuser])
+
+
+
+
+
+    async function fetchUserData() {
+        try {
+            if (!token) {
+                console.log("No token found, redirecting to login.");
+                navigate('/registration');
+                return;
+            }
+            const response = await axios.get("https://savings-hndc.onrender.com/api/users/profile", {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            setUserData(response.data);
+            setIsAdmin(response.data.role === "admin");
+            console.log("Fetched user data:", response.data);
+            console.log("User role:", response.data.role);
+        } catch (error) {
+            console.error("Error fetching user data:", error);
+        }
+    }
+
+
+
+
 
     async function totaldetails() {
         try {
