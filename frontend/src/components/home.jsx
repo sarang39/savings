@@ -11,8 +11,9 @@ import Profile from './profile';
 
 
 export default function Home() {
-    const { id } = useParams();
+
     const [maptransaction, setmaptransaction] = useState([])
+    const [dashborddata, setdashborddata] = useState([])
     const navigate = useNavigate();
     const { mapuser, setmapuser, transactonData } = useContext(MyContext)
     const totalAmount = transactonData.reduce(
@@ -25,6 +26,7 @@ export default function Home() {
         const loadData = async () => {
             await Featchuser();
             await GetAlltransactions();
+            await totaldetails();
         };
 
         loadData();
@@ -36,6 +38,18 @@ export default function Home() {
         console.log("mapuser updated:", mapuser)
     }, [mapuser])
 
+    async function totaldetails() {
+        try {
+            const response = await axios.get("https://savings-hndc.onrender.com/api/transactions/allcalculations")
+            setdashborddata(response.data)
+            console.log("totaldetails==", response.data)
+
+
+        }
+        catch (err) {
+            console.log(err)
+        }
+    }
     async function Featchuser() {
         try {
             const response = await axios.get("https://savings-hndc.onrender.com/api/users/getallusers")
@@ -76,17 +90,17 @@ export default function Home() {
             </div>
             <section class="counter-section" >
                 <div class="counter-box">
-                    <div class="number">7</div>
+                    <div class="number">{dashborddata.totaluser}</div>
                     <p>Users</p>
                 </div>
 
                 <div class="counter-box">
-                    <div class="number">{totalAmount}</div>
+                    <div class="number">{dashborddata.total}</div>
                     <p>Total Amount</p>
                 </div>
 
                 <div class="counter-box">
-                    <div class="number">9800</div>
+                    <div class="number">{dashborddata.weeklypaymentfinetotal}</div>
                     <p>Total Fine Amount</p>
                 </div>
             </section>

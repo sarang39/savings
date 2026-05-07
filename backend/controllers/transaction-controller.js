@@ -77,7 +77,6 @@ const allcalculations = async (req, res) => {
       total: result[0]?.lonefinetotal + result[0]?.weeklypaymentfinetotal + result[0]?.weeklypaymenttotal || 0,
       wallet: (result[0]?.lonefinetotal + result[0]?.weeklypaymentfinetotal + result[0]?.weeklypaymenttotal || 0) / count,
       totaluser: count
-
     }
     return res.status(201).json(data);
 

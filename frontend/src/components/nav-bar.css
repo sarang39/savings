@@ -1,3 +1,52 @@
+/* --- Overlay Background --- */
+.menu-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.45);
+    z-index: 1000;
+    display: flex;
+
+    /* Hidden by default */
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.4s ease, visibility 0.4s ease;
+}
+
+/* When the menu is open, fade in the background */
+.menu-overlay.open {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* --- Sliding Sidebar --- */
+.sidebar-menu {
+    width: 280px;
+    height: 100%;
+    background: #111827;
+    padding: 25px 20px;
+    box-sizing: border-box;
+    border-right: 1px solid rgba(255, 255, 255, 0.08);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-shadow: 4px 0 15px rgba(0, 0, 0, 0.3);
+
+    /* Move it off-screen to the left by default */
+    transform: translateX(-100%);
+    transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+/* When the overlay is open, slide the sidebar into view */
+.menu-overlay.open .sidebar-menu {
+    transform: translateX(0);
+}
+
+
+
+
 .navbar-container {
     position: fixed;
     z-index: 1000;

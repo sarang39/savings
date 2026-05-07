@@ -10,11 +10,7 @@ import { useParams } from "react-router-dom";
 import { PieChart, Pie, Cell, Tooltip } from "recharts";
 
 export default function Profile() {
-
-
-
     const COLORS = ["#8b5cf6", "#3b82f6", "#10b981", "#f59e0b", "#6b7280"];
-
     const navigate = useNavigate();
     const [newname, setnewname] = useState()
     const [payment, setpayment] = useState(50)
@@ -23,7 +19,7 @@ export default function Profile() {
         { name: "Food", value: 850 },
         { name: "Transport", value: 620 },
         { name: "Entertainment", value: 480 },
-        { name: "Others", value: 830 },
+        { name: "Others", value: 830 }
     ])
     const token = localStorage.getItem("AuthToken");
     const {
@@ -174,6 +170,34 @@ export default function Profile() {
                                     )}
                             </div>
                         </div>
+                        <div style={{
+                            width: "350px",
+                            height: "350px",
+                            background: "#0f172a",
+                            borderRadius: "20px",
+                            padding: "20px",
+                            color: "white",
+                            marginTop: "20px"
+                        }}>
+                            <h3>Amount Overview</h3>
+                            <PieChart width={300} height={300}>
+                                <Pie
+                                    data={graphdata}
+                                    cx="50%"
+                                    cy="50%"
+                                    innerRadius={0}   // makes it donut
+                                    outerRadius={100}
+                                    dataKey="value"
+                                >
+                                    {graphdata.map((entry, index) => (
+                                        <Cell key={index} fill={COLORS[index]} />
+                                    ))}
+                                </Pie>
+
+                                <Tooltip />
+                            </PieChart>
+                        </div>
+
                         <div style={{
                             width: "350px",
                             height: "350px",
