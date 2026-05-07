@@ -83,17 +83,18 @@ export default function Profile() {
     async function getProfilepermenet() {
         const token = localStorage.getItem("AuthToken");
 
-        if (!token) {
-            console.error("No token found in storage");
-            return;
-        }
+
         try {
-            const response = await axios.get(`https://savings-hndc.onrender.com/api/users/profile`, {
+            if (!token) {
+                console.error("No token found in storage");
+                return;
+            }
+            const response = await axios.get("https://savings-hndc.onrender.com/api/users/profile", {
                 headers: { Authorization: `Bearer ${token}` }
             })
             console.log("profile response:::", response.data);
             if (typeof transactionData !== 'undefined') {
-                console.log("Transaction Data:", transactonData);
+                console.log("Transaction Data::::", transactonData);
             }
         }
         catch (err) {
