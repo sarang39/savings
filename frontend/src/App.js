@@ -5,12 +5,11 @@ import Registration from './components/registration';
 import Home from './components/home';
 import Nav from './components/nav-bar';
 import { MyContext } from './components/Mycontext';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Profile from './components/profile';
 import Payment from './components/payment';
 import Success from './components/success';
 import Cancel from './components/cancel';
-import axios from 'axios';
 
 function App() {
   const [userName, setUserName] = useState(null);
@@ -32,34 +31,7 @@ function App() {
   const [addpayment, setaddpayment] = useState(false);
   const [profit, setprofit] = useState()
   const [transactonData, settransactionData] = useState([])
-  const [isAdmin, setIsAdmin] = useState(false);
-  const token = localStorage.getItem("token");
-
-  async function fetchUserData() {
-    try {
-      const response = await axios.get("https://savings-hndc.onrender.com/api/users/profile", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      setUserData(response.data);
-      setIsAdmin(response.data.role === "admin");
-      console.log("Fetched user data:", response.data);
-      console.log("User role:", response.data.role);
-    } catch (error) {
-      console.error("Error fetching user data:", error);
-    }
-  }
-
-  useEffect(() => {
-    if (token) {
-      fetchUserData();
-    }
-  }, [token]);
-
-
   const value = {
-    isAdmin, setIsAdmin,
     addpayment, setaddpayment,
     profit, setprofit,
     wallet, setwallet,
