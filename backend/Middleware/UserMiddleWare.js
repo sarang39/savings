@@ -12,7 +12,7 @@ const userMiddleware = async (req, res, next) => {
         const token = authHeader.split(" ")[1]
         const decoded = jwt.verify(token, JWT_SECRET)
         req.userId = decoded.userId
-        console.log(req.userId);
+        console.log("userid from token", req.userId);
         console.log(decoded);
         next()
     } catch (error) {
