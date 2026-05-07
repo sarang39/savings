@@ -111,7 +111,20 @@ const login = async (req, res) => {
 const getProfile = async (req, res) => {
     try {
         // middleware puts the id into req.userId
-        const userid = req.userId;
+        const userid = req.params.id
+        const user = await User.findById(userid).select("-password");
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+        res.json(user);
+    } catch (err) {
+        res.status(500).json({ message: "Server error" });
+    }
+}
+const testgetProfile = async (req, res) => {
+    try {
+        // middleware puts the id into req.userId
+        const userid = req.userId
         const user = await User.findById(userid).select("-password");
         if (!user) {
             return res.status(404).json({ message: "User not found" });
@@ -147,4 +160,4 @@ const edituser = async (req, res) => {
         res.status(500).json({ message: "Server error" })
     }
 }
-module.exports = { register, login, getProfile, getAllUsers, edituser };
+module.exports = { register, login, getProfile, getAllUsers, edituser, testgetProfile };
