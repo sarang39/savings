@@ -5,7 +5,6 @@ import { useState, useEffect } from "react";
 import { useContext } from "react";
 import { MyContext } from "./Mycontext";
 export default function Nav() {
-    const token = localStorage.getItem("AuthToken");
     const navigate = useNavigate();
     const { profileData, edit, setedit, setform, userData, } = useContext(MyContext)
     const [showMenu, setShowMenu] = useState(false);
@@ -21,10 +20,7 @@ export default function Nav() {
         setform(0)
         navigate('/registration')
     }
-    function registration() {
-        setform(1)
-        navigate('/registration')
-    }
+
     useEffect(() => {
         const handleScroll = () => {
             setShowMenu(false);

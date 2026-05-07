@@ -45,7 +45,6 @@ const register = async (req, res) => {
 //     const { name, email, password, role } = req.body;
 //     try {
 //         const existing = await User.findOne({ email });
-
 //         if (existing) {
 //             return res.status(400).json({ message: "User already exists" });
 //         }
@@ -71,11 +70,8 @@ const register = async (req, res) => {
 //             message: "User registered successfully",
 //             user
 //         });
-
 //     } catch (err) {
-
 //         console.error("Register error:", err);
-
 //         res.status(500).json({
 //             message: "Server error"
 //         });
@@ -115,7 +111,7 @@ const login = async (req, res) => {
 const getProfile = async (req, res) => {
     try {
         // middleware puts the id into req.userId
-        const userid = req.params.id
+        const userid = req.userId;
         const user = await User.findById(userid).select("-password");
         if (!user) {
             return res.status(404).json({ message: "User not found" });
@@ -136,7 +132,6 @@ const getAllUsers = async (req, res) => {
 }
 //Admin privileges
 const edituser = async (req, res) => {
-    
     try {
         const userid = req.params.id;
         const newdata = req.body;
@@ -153,4 +148,3 @@ const edituser = async (req, res) => {
     }
 }
 module.exports = { register, login, getProfile, getAllUsers, edituser };
-
