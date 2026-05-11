@@ -40,26 +40,69 @@ export default function Chatbot() {
     }, []);
 
     async function approvalhandling(id) {
+        //     try {
+        //         const response = await axios.put("https://savings-hndc.onrender.com/api/users/creators", {
+        //             headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        //             data: { status: "approved", id: id }
+        //         });
+        //     } catch (error) {
+        //         console.error("Error approving user:", error);
+        //     }
+        // }
+        // async function rejecthandling(id) {
         try {
-            const response = await axios.post("https://savings-hndc.onrender.com/api/users/creators", {
-                headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-                data: { status: "approved", id: id }
-            });
+            const response = await axios.put(
+                "https://savings-hndc.onrender.com/api/users/creators",
+                {
+                    status: "approved",
+                    id: id
+                },
+                {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem("token")}`
+                    }
+                }
+            );
+
+            console.log(response.data);
+
         } catch (error) {
             console.error("Error approving user:", error);
         }
     }
+    // async function rejecthandling(id) {
+    //     try {
+    //         const response = await axios.put("https://savings-hndc.onrender.com/api/users/creators", {
+    //             headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    //             data: { status: "rejected", id: id }
+
+    //         });
+    //     } catch (error) {
+    //         console.error("Error rejecting user:", error);
+    //     }
+    // }
     async function rejecthandling(id) {
         try {
-            const response = await axios.post("https://savings-hndc.onrender.com/api/users/creators", {
-                headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-                data: { status: "rejected", id: id }
+            const response = await axios.put(
+                "https://savings-hndc.onrender.com/api/users/creators",
+                {
+                    status: "rejected",
+                    id: id
+                },
+                {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem("token")}`
+                    }
+                }
+            );
 
-            });
+            console.log(response.data);
+
         } catch (error) {
             console.error("Error rejecting user:", error);
         }
     }
+
 
     return (
         <>

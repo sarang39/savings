@@ -44,18 +44,46 @@ const register = async (req, res) => {
 
 
 //user approval by admin
+// const approveUser = async (req, res) => {
+//     try {
+//         const userid = req.data.id;
+//         const data = req.data;
+//         const update = await User.findByIdAndUpdate(userid, { status: data.status }, { new: true });
+//         if (!update) {
+//             return res.status(404).json({ message: "User not found" });
+//         }
+//         res.status(200).json({ message: "User approved / rejected successfully", user: update });
+//     } catch (err) {
+//         console.error("Approve user error:", err);
+//         res.status(500).json({ message: "Server error" });
+//     }
+// };
 const approveUser = async (req, res) => {
     try {
-        const userid = req.data.id;
-        const data = req.data;
-        const update = await User.findByIdAndUpdate(userid, { status: data.status }, { new: true });
+
+        const { id, status } = req.body;
+
+        const update = await User.findByIdAndUpdate(
+            id,
+            { status: status },
+            { new: true }
+        );
+
         if (!update) {
             return res.status(404).json({ message: "User not found" });
         }
-        res.status(200).json({ message: "User approved / rejected successfully", user: update });
+
+        res.status(200).json({
+            message: "User approved / rejected successfully",
+            user: update
+        });
+
     } catch (err) {
         console.error("Approve user error:", err);
-        res.status(500).json({ message: "Server error" });
+
+        res.status(500).json({
+            message: "Server error"
+        });
     }
 };
 
