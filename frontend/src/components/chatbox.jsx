@@ -1,6 +1,7 @@
 import { useState, useEffect, useContext } from "react";
 import { MyContext } from "./Mycontext"
 import "./chatbot.css";
+import axios from "axios";
 
 export default function Chatbot() {
     const [open, setOpen] = useState(false);
@@ -38,6 +39,28 @@ export default function Chatbot() {
         };
     }, []);
 
+    async function approvalhandling(id) {
+        try {
+            const response = await axios.post("https://savings-hndc.onrender.com/api/users/creators", {
+                headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+                data: { status: "approved", id: id }
+            });
+        } catch (error) {
+            console.error("Error approving user:", error);
+        }
+    }
+    async function rejecthandling(id) {
+        try {
+            const response = await axios.post("https://savings-hndc.onrender.com/api/users/creators", {
+                headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+                data: { status: "rejected", id: id }
+
+            });
+        } catch (error) {
+            console.error("Error rejecting user:", error);
+        }
+    }
+
     return (
         <>
             {/* Chat Button */}
@@ -55,7 +78,7 @@ export default function Chatbot() {
                 </div>
 
                 <div className="chat-body">
-                    {mapuser.map((user) => (
+                    {mapuser.map((user) => (user.status === "pending" ?
                         <div className="request-card" key={user.id}>
                             <div>
 
@@ -65,15 +88,15 @@ export default function Chatbot() {
                             </div>
 
                             <div className="btn-group">
-                                <button className="approve-btn">
+                                <button className="approve-btn" onClick={() => approvalhandling(user._id)}  >
                                     Approve
                                 </button>
 
-                                <button className="reject-btn">
+                                <button className="reject-btn" onClick={() => rejecthandling(user._id)}>
                                     Reject
                                 </button>
                             </div>
-                        </div>
+                        </div> : null
                     ))}
                 </div>
             </div>

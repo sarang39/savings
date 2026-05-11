@@ -41,42 +41,24 @@ const register = async (req, res) => {
         res.status(500).json({ message: "Server error" });
     }
 };
-// const register = async (req, res) => {
-//     const { name, email, password, role } = req.body;
-//     try {
-//         const existing = await User.findOne({ email });
-//         if (existing) {
-//             return res.status(400).json({ message: "User already exists" });
-//         }
-//         console.log(req.body);
-//         console.log(req.file);
-//         const hashedPassword = await bcrypt.hash(password, 10);
-//         if (req.file) {
-//             const result = await cloudinary.uploader.upload(req.file.path, {
-//                 folder: "savings-app",
-//                 use_filename: true
-//             });
-//         }
-//         const userData = {
-//             name,
-//             email,
-//             role,
-//             password: hashedPassword,
-//             photo: req.file ? result.secure_url : null
-//         };
-//         const user = new User(userData);
-//         await user.save();
-//         res.status(201).json({
-//             message: "User registered successfully",
-//             user
-//         });
-//     } catch (err) {
-//         console.error("Register error:", err);
-//         res.status(500).json({
-//             message: "Server error"
-//         });
-//     }
-// };
+
+
+//user approval by admin
+const approveUser = async (req, res) => {
+    try {
+        const userid = req.data.id;
+        const data = req.data;
+        const update = await User.findByIdAndUpdate(userid, { status: data.status }, { new: true });
+        if (!update) {
+            return res.status(404).json({ message: "User not found" });
+        }
+        res.status(200).json({ message: "User approved / rejected successfully", user: update });
+    } catch (err) {
+        console.error("Approve user error:", err);
+        res.status(500).json({ message: "Server error" });
+    }
+};
+
 const login = async (req, res) => {
     const JWT_SECRET = process.env.JWT_SECRET;
     const { email, password } = req.body
@@ -160,4 +142,4 @@ const edituser = async (req, res) => {
         res.status(500).json({ message: "Server error" })
     }
 }
-module.exports = { register, login, getProfile, getAllUsers, edituser, testgetProfile };
+module.exports = { register, login, getProfile, getAllUsers, edituser, testgetProfile, approveUser };
