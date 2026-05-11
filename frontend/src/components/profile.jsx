@@ -68,22 +68,19 @@ export default function Profile() {
             console.error("error fetching transaction", err);
         }
     }
-    async function getProfileANDtransactions() {
-        try {
-            const response = await axios.get(`https://savings-hndc.onrender.com/api/users/profile/${id}`)
-            console.log("profile response", response.data);
-            setUserData(response.data)
-            usertrnsation()
-        }
-        catch (err) {
-            console.error("error fetching profile", err);
-        }
-        console.log("transaction data", transactonData)
-    }
+    // async function getProfileANDtransactions() {
+    //     try {
+    //         const response = await axios.get(`https://savings-hndc.onrender.com/api/users/profile/${id}`)
+    //         console.log("profile response", response.data);
+    //         setUserData(response.data)
+    //         usertrnsation()
+    //     }
+    //     catch (err) {
+    //         console.error("error fetching profile", err);
+    //     }
+    //     console.log("transaction data", transactonData)
+    // }
     async function getProfilepermenet() {
-        const token = localStorage.getItem("AuthToken");
-
-
         try {
             if (!token) {
                 console.error("No token found in storage");
@@ -92,6 +89,8 @@ export default function Profile() {
             const response = await axios.get("https://savings-hndc.onrender.com/api/users/profile", {
                 headers: { Authorization: `Bearer ${token}` }
             })
+            setUserData(response.data)
+            usertrnsation()
             console.log("profile response:::", response.data);
             if (typeof transactionData !== 'undefined') {
                 console.log("Transaction Data::::", transactonData);
@@ -129,7 +128,8 @@ export default function Profile() {
                     headers: { Authorization: `Bearer ${token}` }
                 });
             if (response.status === 200) {
-                getProfileANDtransactions();
+                // getProfileANDtransactions();
+                getProfilepermenet();
                 alert("successfully changed");
 
 
@@ -149,7 +149,8 @@ export default function Profile() {
         }
     }
     useEffect(() => {
-        getProfileANDtransactions();
+        // getProfileANDtransactions();
+
         getProfilepermenet();
         totaldetails()
     }, [id]);
@@ -158,10 +159,6 @@ export default function Profile() {
             paddingTop: '20px'
         }} >
             <div >
-            </div>
-            <div>
-                <button>Edit</button>
-                <button>Add Money</button>
             </div>
             {edit === 0 ? (
 
@@ -193,37 +190,10 @@ export default function Profile() {
                                     )}
                             </div>
                         </div>
-                        <div style={{
-                            width: "350px",
-                            height: "350px",
-                            background: "#0f172a",
-                            borderRadius: "20px",
-                            padding: "20px",
-                            color: "white",
-                            marginTop: "20px"
-                        }}>
-                            <h3>Amount Overview</h3>
-                            <PieChart width={300} height={300}>
-                                <Pie
-                                    data={graphdata}
-                                    cx="50%"
-                                    cy="50%"
-                                    innerRadius={0}   // makes it donut
-                                    outerRadius={100}
-                                    dataKey="value"
-                                >
-                                    {graphdata.map((entry, index) => (
-                                        <Cell key={index} fill={COLORS[index]} />
-                                    ))}
-                                </Pie>
-
-                                <Tooltip />
-                            </PieChart>
-                        </div>
 
                         <div style={{
                             width: "350px",
-                            height: "350px",
+                            height: "auto",
                             background: "#0f172a",
                             borderRadius: "20px",
                             padding: "20px",
@@ -249,6 +219,34 @@ export default function Profile() {
 
                                 <Tooltip />
                             </PieChart>
+                            <div>
+                                {graphdata.map((entry, index) => (
+                                    <div
+                                        key={index}
+                                        style={{
+                                            display: "flex",
+                                            alignItems: "center",
+                                            gap: "10px",
+                                            marginBottom: "8px",
+                                        }}
+                                    >
+                                        {/* Small color cube */}
+                                        <div
+                                            style={{
+                                                width: "15px",
+                                                height: "15px",
+                                                backgroundColor: COLORS[index],
+                                                borderRadius: "3px",
+                                            }}
+                                        ></div>
+
+                                        {/* Text */}
+                                        <span>
+                                            {entry.name}
+                                        </span>
+                                    </div>
+                                ))}
+                            </div>
                         </div>
                     </div>
                     <div className="right">

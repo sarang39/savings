@@ -23,6 +23,11 @@ const userSchema = new mongoose.Schema({
         enum: ['user', 'admin'],
         default: 'user'
     },
+    status: {
+        type: String,
+        enum: ['approved', 'rejected', 'pending'],
+        default: 'pending'
+    },
     joined: {
         type: Date,
         default: Date.now

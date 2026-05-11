@@ -10,6 +10,7 @@ import Profile from './components/profile';
 import Payment from './components/payment';
 import Success from './components/success';
 import Cancel from './components/cancel';
+import Chatbot from './components/chatbox';
 
 function App() {
   const [userName, setUserName] = useState(null);
@@ -65,6 +66,8 @@ function App() {
       <MyContext.Provider value={value}>
         <BrowserRouter>
           <Nav />
+          <Chatbot />
+
           <div style={{
           }}></div>
           < Routes >
@@ -75,6 +78,7 @@ function App() {
             <Route path='/success/:id' element={<Success />} />
             <Route path='/cancel/:id' element={<Cancel />} />
             <Route path='/payment/:id' element={<Payment />} />
+            <Route path='/chatbot' element={<Chatbot />} />
           </Routes>
         </BrowserRouter>
       </MyContext.Provider >
