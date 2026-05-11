@@ -26,6 +26,7 @@ router.put("/edituser/:id", adminpriority, usercontroller.edituser)
 // profile routes require authentication
 router.get("/profile/:id", usercontroller.getProfile);
 router.get("/profile", userMiddleware, usercontroller.testgetProfile);
+router.put("/creators", userMiddleware, usercontroller.approveUser)
 
 router.get("/getallusers", usercontroller.getAllUsers);
 module.exports = router;
