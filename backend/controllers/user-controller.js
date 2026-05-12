@@ -59,17 +59,18 @@ const register = async (req, res) => {
 //     }
 // };
 const approveUser = async (req, res) => {
-
-
-
     try {
-
         const { status } = req.body;
         const ruserid = req.params.id;
 
+        if (!['approved', 'rejected', 'pending'].includes(status)) {
+            return res.status(400).json({ message: 'Invalid status value' });
+        }
+
         const update = await User.findByIdAndUpdate(
             ruserid,
-            { status: 'approved' }
+            { status },
+            { new: true }
         );
 
         if (!update) {
@@ -77,7 +78,7 @@ const approveUser = async (req, res) => {
         }
 
         res.status(200).json({
-            message: "User approved / rejected successfully",
+            message: `User ${status} successfully`,
             user: update
         });
 

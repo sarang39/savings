@@ -39,15 +39,13 @@ export default function Chatbot() {
         };
     }, []);
 
-    async function approvalhandling(id) {
+    const apiBaseUrl = "https://savings-hndc.onrender.com";
 
+    async function updateUserStatus(id, status) {
         try {
             const response = await axios.put(
-                `https://savings-hndc.onrender.com/api/users/approve/${id}`
-                ,
-                {
-                    status: "approved"
-                },
+                `${apiBaseUrl}/api/users/edituser/${id}`,
+                { status },
                 {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem("token")}`
@@ -56,31 +54,22 @@ export default function Chatbot() {
             );
 
             console.log(response.data);
-
+            setmapuser((prevUsers) =>
+                prevUsers.map((user) =>
+                    user._id === id ? { ...user, status } : user
+                )
+            );
         } catch (error) {
-            console.error("Error approving user:", error);
+            console.error(`Error ${status} user:`, error);
         }
     }
 
-    async function rejecthandling(id) {
-        try {
-            const response = await axios.put(
-                `https://savings-hndc.onrender.com/api/users/approve/${id}`,
-                {
-                    status: "rejected"
-                },
-                {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem("token")}`
-                    }
-                }
-            );
+    function approvalhandling(id) {
+        updateUserStatus(id, "approved");
+    }
 
-            console.log(response.data);
-
-        } catch (error) {
-            console.error("Error rejecting user:", error);
-        }
+    function rejecthandling(id) {
+        updateUserStatus(id, "rejected");
     }
 
 
@@ -102,7 +91,7 @@ export default function Chatbot() {
 
                 <div className="chat-body">
                     {mapuser.map((user) => (user.status === "pending" ?
-                        <div className="request-card" key={user.id}>
+                        <div className="request-card" key={user._id}>
                             <div>
 
 
