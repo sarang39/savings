@@ -43,7 +43,8 @@ export default function Chatbot() {
 
         try {
             const response = await axios.put(
-                "https://savings-hndc.onrender.com/api/users/creators",
+                "https://savings-hndc.onrender.com/api/users/approve"
+                ,
                 {
                     status: "approved",
                     ruserid: id
@@ -65,7 +66,7 @@ export default function Chatbot() {
     async function rejecthandling(id) {
         try {
             const response = await axios.put(
-                "https://savings-hndc.onrender.com/api/users/creators",
+                "https://savings-hndc.onrender.com/api/users/approve",
                 {
                     status: "rejected",
                     ruserid: id
