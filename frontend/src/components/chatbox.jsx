@@ -43,11 +43,10 @@ export default function Chatbot() {
 
         try {
             const response = await axios.put(
-                "https://savings-hndc.onrender.com/api/users/approve"
+                `https://savings-hndc.onrender.com/api/users/approve/${id}`
                 ,
                 {
-                    status: "approved",
-                    ruserid: id
+                    status: "approved"
                 },
                 {
                     headers: {
@@ -66,10 +65,9 @@ export default function Chatbot() {
     async function rejecthandling(id) {
         try {
             const response = await axios.put(
-                "https://savings-hndc.onrender.com/api/users/approve",
+                `https://savings-hndc.onrender.com/api/users/approve/${id}`,
                 {
-                    status: "rejected",
-                    ruserid: id
+                    status: "rejected"
                 },
                 {
                     headers: {
