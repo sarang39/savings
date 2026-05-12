@@ -59,14 +59,17 @@ const register = async (req, res) => {
 //     }
 // };
 const approveUser = async (req, res) => {
+
+
+
     try {
 
-        const { id, status } = req.body;
+        const { status } = req.body;
+        const ruserid = req.params.id;
 
         const update = await User.findByIdAndUpdate(
-            id,
-            { status: status },
-            { new: true }
+            ruserid,
+            { status: 'approved' }
         );
 
         if (!update) {
