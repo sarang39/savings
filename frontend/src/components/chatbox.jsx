@@ -5,28 +5,10 @@ import axios from "axios";
 
 export default function Chatbot() {
     const [open, setOpen] = useState(false);
+    const [urid, seturid] = useState()
 
     const { mapuser, setmapuser, transactonData } = useContext(MyContext)
-    const requests = [
-        {
-            id: 1,
-            name: "Rahul Creator",
-            followers: "12K Followers",
-            status: "Pending"
-        },
-        {
-            id: 2,
-            name: "Amina Vlogs",
-            followers: "25K Followers",
-            status: "Pending"
-        },
-        {
-            id: 3,
-            name: "Tech Malayalam",
-            followers: "8K Followers",
-            status: "Pending"
-        }
-    ];
+
     useEffect(() => {
         const handleScroll = () => {
             setOpen(false);
@@ -41,16 +23,11 @@ export default function Chatbot() {
 
     const apiBaseUrl = "https://savings-hndc.onrender.com";
 
-    async function updateUserStatus(id, status) {
+    async function updateUserStatus(id) {
         try {
             const response = await axios.put(
-                `${apiBaseUrl}/api/users/edituser/${id}`,
-                { status },
-                {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem("token")}`
-                    }
-                }
+                `${apiBaseUrl}/api/users/approve`,
+                { status: "approved", userid: id }
             );
 
             console.log(response.data);
@@ -64,18 +41,11 @@ export default function Chatbot() {
         }
     }
 
-    function approvalhandling(id) {
-        updateUserStatus(id, "approved");
-    }
 
-    function rejecthandling(id) {
-        updateUserStatus(id, "rejected");
-    }
 
 
     return (
         <>
-            {/* Chat Button */}
             <div
                 className="chat-button"
                 onClick={() => setOpen(!open)}
@@ -100,11 +70,11 @@ export default function Chatbot() {
                             </div>
 
                             <div className="btn-group">
-                                <button className="approve-btn" onClick={() => approvalhandling(user._id)}  >
+                                <button className="approve-btn" onClick={() => updateUserStatus(user._id)}  >
                                     Approve
                                 </button>
 
-                                <button className="reject-btn" onClick={() => rejecthandling(user._id)}>
+                                <button className="reject-btn" onClick={() => updateUserStatus(user._id)}>
                                     Reject
                                 </button>
                             </div>
