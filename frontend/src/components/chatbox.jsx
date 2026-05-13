@@ -33,11 +33,11 @@ export default function Chatbot() {
             console.log(response.data);
             setmapuser((prevUsers) =>
                 prevUsers.map((user) =>
-                    user._id === id ? { ...user, status } : user
+                    user._id === id ? { ...user, status: "approved" } : user
                 )
             );
         } catch (error) {
-            console.error(`Error ${status} user:`, error);
+            console.error(`Error user:`, error);
         }
     }
 
