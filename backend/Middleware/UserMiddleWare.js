@@ -4,6 +4,7 @@ const multer = require("multer")
 const fs = require("fs")
 
 const userMiddleware = async (req, res, next) => {
+    console.log("userMiddleware called");
     try {
         const authHeader = req.headers.authorization
         if (!authHeader) {

@@ -26,7 +26,7 @@
 //     async function userlogin(e) {
 //         e.preventDefault()
 //         try {
-//             const response = await axios.post("https://savings-hndc.onrender.com/api/users/login", {
+//             const response = await axios.post("process.env.REACT_APP_API/api/users/login", {
 //                 email: email,
 //                 password: password
 //             });
@@ -57,7 +57,7 @@
 //             formData.append("phonenumber", phonenumber);
 //             formData.append("photo", photo);
 //             formData.append("role", role);
-//             const response = await axios.post("https://savings-hndc.onrender.com/api/users/register", formData, {
+//             const response = await axios.post("process.env.REACT_APP_API/api/users/register", formData, {
 //                 headers: {
 //                     "Content-Type": "multipart/form-data"
 //                 }
@@ -204,7 +204,7 @@ export default function Registration() {
         if (!validateLogin()) return;
 
         try {
-            const response = await axios.post("https://savings-hndc.onrender.com/api/users/login", {
+            const response = await axios.post(`${process.env.REACT_APP_API}/api/users/login`, {
                 email: email,
                 password: password
             });
@@ -246,7 +246,7 @@ export default function Registration() {
             formData.append("photo", photo);
             formData.append("role", role);
 
-            const response = await axios.post("https://savings-hndc.onrender.com/api/users/register", formData, {
+            const response = await axios.post(`${process.env.REACT_APP_API}/api/users/register`, formData, {
                 headers: {
                     "Content-Type": "multipart/form-data"
                 }

@@ -31,7 +31,7 @@ function App() {
   // returned by the server and avoid .map() errors.
   const [userData, setUserData] = useState({})
   const [mapuser, setmapuser] = useState([])
-  const [profileData, setProfileData] = useState([])
+  const [profileData, setProfileData] = useState({})
   const [form, setform] = useState(true)
   const [wallet, setwallet] = useState([])
   const [addpayment, setaddpayment] = useState(false);

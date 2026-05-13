@@ -41,7 +41,7 @@ export default function Profile() {
     );
     async function totaldetails() {
         try {
-            const response = await axios.get("https://savings-hndc.onrender.com/api/transactions/allcalculations")
+            const response = await axios.get(`${process.env.REACT_APP_API}/api/transactions/allcalculations`)
             setwallet(response.data.wallet)
             setgraphdata([
                 { name: "weekly payment total:", value: response.data.weeklypaymenttotal },
@@ -58,7 +58,7 @@ export default function Profile() {
 
     async function usertrnsation() {
         try {
-            const response = await axios.get(`https://savings-hndc.onrender.com/api/transactions/gettransaction/${id}`, {
+            const response = await axios.get(`${process.env.REACT_APP_API}/api/transactions/gettransaction/${id}`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             settransactionData(response.data)
@@ -68,25 +68,14 @@ export default function Profile() {
             console.error("error fetching transaction", err);
         }
     }
-    // async function getProfileANDtransactions() {
-    //     try {
-    //         const response = await axios.get(`https://savings-hndc.onrender.com/api/users/profile/${id}`)
-    //         console.log("profile response", response.data);
-    //         setUserData(response.data)
-    //         usertrnsation()
-    //     }
-    //     catch (err) {
-    //         console.error("error fetching profile", err);
-    //     }
-    //     console.log("transaction data", transactonData)
-    // }
+
     async function getProfilepermenet() {
         try {
             if (!token) {
                 console.error("No token found in storage");
                 return;
             }
-            const response = await axios.get("https://savings-hndc.onrender.com/api/users/profileper", {
+            const response = await axios.get(`${process.env.REACT_APP_API}/api/users/profileper`, {
                 headers: { Authorization: `Bearer ${token}` }
             })
             setUserData(response.data)
@@ -104,7 +93,7 @@ export default function Profile() {
 
     async function Edituser() {
         try {
-            const response = await axios.put(`https://savings-hndc.onrender.com/api/users/edituser/${id}`, { name: newname }, {
+            const response = await axios.put(`${process.env.REACT_APP_API}/api/users/edituser/${id}`, { name: newname }, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             if (response.status === 200) {
@@ -119,7 +108,7 @@ export default function Profile() {
     //re-payment
     async function RePay(id) {
         try {
-            const response = await axios.put(`https://savings-hndc.onrender.com/api/transactions/editpayment/${id}`,
+            const response = await axios.put(`${process.env.REACT_APP_API}/api/transactions/editpayment/${id}`,
                 {
                     weeklypayment: payment,
                     paymentid: id
@@ -274,34 +263,47 @@ export default function Profile() {
                         <div className="transaction-details">
                             <p>transaction details</p>
                             <table className="transaction-table">
-                                <tr>
-                                    <th>Date</th>
-                                    <th>Amount</th>
-                                    <th>Fine</th>
-                                    <th>Loan</th>
-                                    <th>
-                                        <button style={{ width: '50%', height: '100%', fontSize: "1rem" }} onClick={() => (setaddpayment(true))}>⚙️{console.log(addpayment)}
-                                        </button>
-                                    </th>
-                                </tr>
-                                {
-                                    transactonData.map((item) => (
-                                        <tr
-                                            key={item._id}>
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Amount</th>
+                                        <th>Fine</th>
+                                        <th>Loan</th>
+                                        <th>
+                                            <button
+                                                style={{ width: '50%', height: '100%', fontSize: "1rem" }}
+                                                onClick={() => setaddpayment(true)}
+                                            >
+                                                ⚙️
+                                            </button>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {transactonData.map((item) => (
+                                        <tr key={item._id}>
                                             <td>{item.date.split('T')[0]}</td>
                                             <td>{item.weeklypayment}</td>
                                             <td>{item.weeklypaymentfine}</td>
                                             <td>{item.loan}</td>
-                                            {addpayment && item.weeklypayment === 0 ?
-                                                <td style={{ display: "flex", gap: '10px' }} >
-                                                    <button style={{ width: '50%', height: '100%', fontSize: "1rem" }} >Delete</button>
-                                                    <button style={{ width: '50%', height: '100%', fontSize: "1rem" }} onClick={() => RePay(item._id)} >Re-pay{item._id}</button></td>
-                                                :
-                                                <td>
+                                            {addpayment && item.weeklypayment === 0 ? (
+                                                <td style={{ display: "flex", gap: '10px' }}>
+                                                    <button style={{ width: '50%', height: '100%', fontSize: "1rem" }}>
+                                                        Delete
+                                                    </button>
+                                                    <button
+                                                        style={{ width: '50%', height: '100%', fontSize: "1rem" }}
+                                                        onClick={() => RePay(item._id)}
+                                                    >
+                                                        Re-pay
+                                                    </button>
                                                 </td>
-                                            }
+                                            ) : (
+                                                <td></td>
+                                            )}
                                         </tr>
                                     ))}
+                                </tbody>
                             </table>
                         </div>
                     </div>
@@ -318,7 +320,7 @@ export default function Profile() {
                                             <img
                                                 src={
                                                     userData.photo
-                                                        ? `https://savings-hndc.onrender.com${userData.photo}`
+                                                        ? `${process.env.REACT_APP_API}${userData.photo}`
                                                         : "https://www.shutterstock.com/image-vector/default-avatar-profile-icon-transparent-600nw-2463868847.jpg"
                                                 }
                                                 alt="profile"

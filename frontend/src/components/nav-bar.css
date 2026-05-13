@@ -144,4 +144,10 @@
     justify-content: end;
     align-items: end;
     padding-right: 1%;
+    gap: '8px';
+}
+
+.top button {
+    margin: 0px 8px 0px 2px;
+    content: Flex;
 }

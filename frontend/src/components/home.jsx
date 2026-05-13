@@ -40,11 +40,9 @@ export default function Home() {
 
     async function totaldetails() {
         try {
-            const response = await axios.get("https://savings-hndc.onrender.com/api/transactions/allcalculations")
+            const response = await axios.get(`${process.env.REACT_APP_API}/api/transactions/allcalculations`)
             setdashborddata(response.data)
             console.log("totaldetails==", response.data)
-
-
         }
         catch (err) {
             console.log(err)
@@ -52,7 +50,7 @@ export default function Home() {
     }
     async function Featchuser() {
         try {
-            const response = await axios.get("https://savings-hndc.onrender.com/api/users/getallusers")
+            const response = await axios.get(`${process.env.REACT_APP_API}/api/users/getallusers`)
             setmapuser(response.data)
             console.log("mapuser", response.data)
             console.log("setmapuser", mapuser)
@@ -64,7 +62,7 @@ export default function Home() {
 
     async function GetAlltransactions() {
         try {
-            const res = await axios.get(`https://savings-hndc.onrender.com/api/transactions/listTransactions`)
+            const res = await axios.get(`${process.env.REACT_APP_API}/api/transactions/listTransactions`)
             setmaptransaction(res.data)
 
         }
@@ -72,6 +70,7 @@ export default function Home() {
             console.log("error in featch transaction:", err)
         }
     }
+
     return (
         <div>
             <div className="start">
@@ -88,19 +87,19 @@ export default function Home() {
                     <div className="forimagebackground"></div>
                 </div>
             </div>
-            <section class="counter-section" >
-                <div class="counter-box">
-                    <div class="number">{dashborddata.totaluser}</div>
+            <section className="counter-section" >
+                <div className="counter-box">
+                    <div className="number">{dashborddata.totaluser}</div>
                     <p>Users</p>
                 </div>
 
-                <div class="counter-box">
-                    <div class="number">{dashborddata.total}</div>
+                <div className="counter-box">
+                    <div className="number">{dashborddata.total}</div>
                     <p>Total Amount</p>
                 </div>
 
-                <div class="counter-box">
-                    <div class="number">{dashborddata.weeklypaymentfinetotal}</div>
+                <div className="counter-box">
+                    <div className="number">{dashborddata.weeklypaymentfinetotal}</div>
                     <p>Total Fine Amount</p>
                 </div>
             </section>
@@ -123,21 +122,22 @@ export default function Home() {
                 alignItems: 'start'
             }} >
                 {mapuser.map((item) => (
-                    <div key={item._id} className="profile-card" style={{ marginBottom: '20px' }} onClick={() => profile_disply(item._id)}>
-                        <div className="profile-image-wrapper">
-                            <img
-                                src={
-                                    item.photo
-                                        ? item.photo
-                                        : "https://www.shutterstock.com/image-vector/default-avatar-profile-icon-transparent-600nw-2463868847.jpg"
-                                }
-                                alt="profile"
-                            />
-                        </div>
-                        <h2 className="profile-name">{item.name}</h2>
-                        <p className="profile-role">{item.email}</p>
-                        <p className="profile-location">New York, NY</p>
-                    </div>
+                    item.status === "approved" ? (
+                        <div key={item._id} className="profile-card" style={{ marginBottom: '20px' }} onClick={() => profile_disply(item._id)}>
+                            <div className="profile-image-wrapper">
+                                <img
+                                    src={
+                                        item.photo
+                                            ? item.photo
+                                            : "https://www.shutterstock.com/image-vector/default-avatar-profile-icon-transparent-600nw-2463868847.jpg"
+                                    }
+                                    alt="profile"
+                                />
+                            </div>
+                            <h2 className="profile-name">{item.name}</h2>
+                            <p className="profile-role">{item.email}</p>
+                            <p className="profile-location">New York, NY</p>
+                        </div>) : null
                 ))}
             </div>
 

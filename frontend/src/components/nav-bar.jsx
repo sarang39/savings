@@ -7,7 +7,6 @@ import { MyContext } from "./Mycontext";
 import axios from "axios";
 export default function Nav() {
 
-    const userstatus = localStorage.getItem("status");
     const navigate = useNavigate();
     const { profileData, edit, setedit, setform, userData, setProfileData, } = useContext(MyContext)
     const [showMenu, setShowMenu] = useState(false);
@@ -16,13 +15,14 @@ export default function Nav() {
 
     async function fetchProfile() {
         try {
-            const response = await axios.get("https://savings-hndc.onrender.com/api/users/profileper", {
+            const response = await axios.get(`${process.env.REACT_APP_API}/api/users/profileper`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
             });
 
             setProfileData(response.data);
+            console.log("profile status", response.data.status);
 
         } catch (error) {
             console.error("Error fetching profile:", error);
@@ -31,6 +31,13 @@ export default function Nav() {
     useEffect(() => {
         if (token) {
             fetchProfile();
+        }
+        else {
+            navigate('/registration')
+        }
+        if (profileData.status === "pending") {
+            alert("Your account is pending approval. Please wait for an admin to approve your account.")
+            navigate('/waiting')
         }
     }, [token]);
     console.log("profile data in nav", profileData)
@@ -58,7 +65,7 @@ export default function Nav() {
     return (
         <div>
             {
-                token && userstatus === "approved" ?
+                token && profileData.status === "approved" ?
                     <div>
 
                         < div className="navbar-container" >
@@ -74,12 +81,18 @@ export default function Nav() {
                                         <button onClick={() => navigate('/home')}>Home</button>
 
                                         <button onClick={() => login()}>Login</button>
-                                        <button onClick={() => profile()} style={{ borderRadius: '100%', aspectRatio: '1/1', padding: "0%", border: '0%', margin: '0%' }}>
+                                        <button onClick={() => profile()} style={{
+                                            borderRadius: '100%',
+                                            aspectRatio: '1/1',
+                                            padding: "0%",
+                                            border: '0%',
+                                            margin: '0.5%'
+                                        }}>
                                             {userData && typeof userData === 'object' ?
                                                 (
 
                                                     <img className="ring"
-                                                        style={{ objectFit: "cover", width: "100%", height: '100%', borderRadius: '100%', aspectRatio: '1/1', padding: "0%" }}
+                                                        style={{ objectFit: "cover", width: "90%", height: '90%', borderRadius: '100%', aspectRatio: '1/1', padding: "0%" }}
                                                         src={
                                                             userData.photo
                                                                 ? userData.photo
