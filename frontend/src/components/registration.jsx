@@ -213,8 +213,13 @@ export default function Registration() {
                 setProfileData(response.data.user);
                 localStorage.setItem("AuthToken", response.data.AuthToken);
                 localStorage.setItem("id", response.data.user._id);
+                localStorage.setItem("role", response.data.user.status);
                 setErrors({}); // Clear any previous errors
-                Navigate("/home");
+                if (response.data.user.status === "approved") {
+                    Navigate("/home");
+                } else {
+                    Navigate("/waiting");
+                }
             }
         } catch (err) {
             if (err.response && err.response.status === 400) {

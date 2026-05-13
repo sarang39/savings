@@ -62,7 +62,7 @@ export default function Profile() {
                 headers: { Authorization: `Bearer ${token}` }
             });
             settransactionData(response.data)
-            console.log("transaction response", response.data)
+            console.log("transaction response", response.message)
         }
         catch (err) {
             console.error("error fetching transaction", err);
@@ -86,7 +86,7 @@ export default function Profile() {
                 console.error("No token found in storage");
                 return;
             }
-            const response = await axios.get("https://savings-hndc.onrender.com/api/users/profile", {
+            const response = await axios.get("https://savings-hndc.onrender.com/api/users/profileper", {
                 headers: { Authorization: `Bearer ${token}` }
             })
             setUserData(response.data)

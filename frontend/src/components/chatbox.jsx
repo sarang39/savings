@@ -5,6 +5,7 @@ import axios from "axios";
 
 export default function Chatbot() {
     const token = localStorage.getItem('AuthToken');
+    const userstatus = localStorage.getItem("status");
     const [open, setOpen] = useState(false);
     const [urid, seturid] = useState()
 
@@ -47,7 +48,7 @@ export default function Chatbot() {
 
     return (
         <>
-            {token ? <>
+            {token && userstatus === "approved" ? <>
                 <div
                     className="chat-button"
                     onClick={() => setOpen(!open)}

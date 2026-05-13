@@ -5,9 +5,10 @@ import { useState, useEffect } from "react";
 import { useContext } from "react";
 import { MyContext } from "./Mycontext";
 export default function Nav() {
-    const token = localStorage.getItem('AuthToken');
+
+    const userstatus = localStorage.getItem("status");
     const navigate = useNavigate();
-    const { profileData, edit, setedit, setform, userData, } = useContext(MyContext)
+    const { profileData, edit, setedit, setform, userData, token } = useContext(MyContext)
     const [showMenu, setShowMenu] = useState(false);
     const id = localStorage.getItem("id");
 
@@ -37,7 +38,7 @@ export default function Nav() {
     return (
         <div>
             {
-                token ?
+                token && userstatus === "approved" ?
                     <div>
 
                         < div className="navbar-container" >
