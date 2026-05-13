@@ -70,19 +70,19 @@ function App() {
         <BrowserRouter>
           <Nav />
           <Chatbot />
-          {token ? <Home /> : <Registration />}
-          <div>
-            < Routes >
-              <Route path='/registration' element={<Registration />} />
-              <Route path='/home' element={<Home />} />
-              <Route path='/profile/:id' element={<Profile />} />
-              <Route path='/login' element={<Registration />} />
-              <Route path='/success/:id' element={<Success />} />
-              <Route path='/cancel/:id' element={<Cancel />} />
-              <Route path='/payment/:id' element={<Payment />} />
-              <Route path='/chatbot' element={<Chatbot />} />
-            </Routes>
-          </div>
+          {token ? <Home /> :
+            <div>
+              < Routes >
+                <Route path='/registration' element={<Registration />} />
+                <Route path='/home' element={<Home />} />
+                <Route path='/profile/:id' element={<Profile />} />
+                <Route path='/login' element={<Registration />} />
+                <Route path='/success/:id' element={<Success />} />
+                <Route path='/cancel/:id' element={<Cancel />} />
+                <Route path='/payment/:id' element={<Payment />} />
+                <Route path='/chatbot' element={<Chatbot />} />
+              </Routes>
+            </div>}
         </BrowserRouter>
       </MyContext.Provider >
     </div>
