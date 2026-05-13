@@ -65,7 +65,7 @@ export default function Nav() {
     return (
         <div>
             {
-                token && profileData.status === "approved" ?
+                token ?
                     <div>
 
                         < div className="navbar-container" >
