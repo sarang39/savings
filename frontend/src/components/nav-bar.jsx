@@ -1,18 +1,38 @@
 
 import "./nav-bar.css";
 import { useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState, useEffect, use } from "react";
 import { useContext } from "react";
 import { MyContext } from "./Mycontext";
+import axios from "axios";
 export default function Nav() {
 
     const userstatus = localStorage.getItem("status");
     const navigate = useNavigate();
-    const { profileData, edit, setedit, setform, userData, token } = useContext(MyContext)
+    const { profileData, edit, setedit, setform, userData, setProfileData, } = useContext(MyContext)
     const [showMenu, setShowMenu] = useState(false);
     const id = localStorage.getItem("id");
+    const token = localStorage.getItem("AuthToken");
 
+    async function fetchProfile() {
+        try {
+            const response = await axios.get("https://savings-hndc.onrender.com/api/users/profileper", {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
 
+            setProfileData(response.data);
+
+        } catch (error) {
+            console.error("Error fetching profile:", error);
+        }
+    }
+    useEffect(() => {
+        if (token) {
+            fetchProfile();
+        }
+    }, [token]);
     console.log("profile data in nav", profileData)
 
     function profile() {
