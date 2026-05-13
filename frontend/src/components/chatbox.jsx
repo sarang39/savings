@@ -4,6 +4,7 @@ import "./chatbot.css";
 import axios from "axios";
 
 export default function Chatbot() {
+    const token = localStorage.getItem('AuthToken');
     const [open, setOpen] = useState(false);
     const [urid, seturid] = useState()
 
@@ -46,42 +47,46 @@ export default function Chatbot() {
 
     return (
         <>
-            <div
-                className="chat-button"
-                onClick={() => setOpen(!open)}
-            >
-                💬
-            </div>
-
-            {/* Chat Box */}
-            <div className={`chat-container ${open ? "open" : ""}`}>
-                <div className="chat-header">
-                    <h3>Creator Requests</h3>
+            {token ? <>
+                <div
+                    className="chat-button"
+                    onClick={() => setOpen(!open)}
+                >
+                    💬
                 </div>
 
-                <div className="chat-body">
-                    {mapuser.map((user) => (user.status === "pending" ?
-                        <div className="request-card" key={user._id}>
-                            <div>
+                {/* Chat Box */}
+                <div className={`chat-container ${open ? "open" : ""}`}>
+                    <div className="chat-header">
+                        <h3>Creator Requests</h3>
+                    </div>
+
+                    <div className="chat-body">
+                        {mapuser.map((user) => (user.status === "pending" ?
+                            <div className="request-card" key={user._id}>
+                                <div>
 
 
-                                <p>{user.name}</p>
-                                <span>{user.status}</span>
-                            </div>
+                                    <p>{user.name}</p>
+                                    <span>{user.status}</span>
+                                </div>
 
-                            <div className="btn-group">
-                                <button className="approve-btn" onClick={() => updateUserStatus(user._id)}  >
-                                    Approve
-                                </button>
+                                <div className="btn-group">
+                                    <button className="approve-btn" onClick={() => updateUserStatus(user._id)}  >
+                                        Approve
+                                    </button>
 
-                                <button className="reject-btn" onClick={() => updateUserStatus(user._id)}>
-                                    Reject
-                                </button>
-                            </div>
-                        </div> : null
-                    ))}
+                                    <button className="reject-btn" onClick={() => updateUserStatus(user._id)}>
+                                        Reject
+                                    </button>
+                                </div>
+                            </div> : null
+                        ))}
+                    </div>
                 </div>
-            </div>
+            </> : <div></div>
+            }
+
         </>
     );
 }

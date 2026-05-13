@@ -10,9 +10,11 @@ import Profile from './components/profile';
 import Payment from './components/payment';
 import Success from './components/success';
 import Cancel from './components/cancel';
+import axios from 'axios';
 import Chatbot from './components/chatbox';
 
 function App() {
+  const token = localStorage.getItem('AuthToken');
   const [userName, setUserName] = useState(null);
   const [email, setEmail] = useState(null);
   const [role, setRole] = useState("user");
@@ -61,25 +63,26 @@ function App() {
     transactonData,
     settransactionData
   }
+
   return (
     < div style={{}}>
       <MyContext.Provider value={value}>
         <BrowserRouter>
           <Nav />
           <Chatbot />
-
-          <div style={{
-          }}></div>
-          < Routes >
-            <Route path='/registration' element={<Registration />} />
-            <Route path='/home' element={<Home />} />
-            <Route path='/profile/:id' element={<Profile />} />
-            <Route path='/login' element={<Registration />} />
-            <Route path='/success/:id' element={<Success />} />
-            <Route path='/cancel/:id' element={<Cancel />} />
-            <Route path='/payment/:id' element={<Payment />} />
-            <Route path='/chatbot' element={<Chatbot />} />
-          </Routes>
+          {token ? <Home /> : <Registration />}
+          <div>
+            < Routes >
+              <Route path='/registration' element={<Registration />} />
+              <Route path='/home' element={<Home />} />
+              <Route path='/profile/:id' element={<Profile />} />
+              <Route path='/login' element={<Registration />} />
+              <Route path='/success/:id' element={<Success />} />
+              <Route path='/cancel/:id' element={<Cancel />} />
+              <Route path='/payment/:id' element={<Payment />} />
+              <Route path='/chatbot' element={<Chatbot />} />
+            </Routes>
+          </div>
         </BrowserRouter>
       </MyContext.Provider >
     </div>
