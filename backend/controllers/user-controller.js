@@ -134,7 +134,7 @@ const login = async (req, res) => {
     const { email, password } = req.body
     try {
         const user = await User.findOne({ email })
-        const AuthToken = jwt.sign({ userId: user._id, role: user.role }, JWT_SECRET, { expiresIn: "1h" })
+        const AuthToken = jwt.sign({ userId: user._id, role: user.role }, JWT_SECRET, { expiresIn: "90d" })
         console.log("in login function")
         if (!user) {
             console.log("invalid credentials")

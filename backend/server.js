@@ -4,6 +4,7 @@ const connectDB = require("./config/db");
 const cors = require("cors");
 const userRoutes = require("./routes/user-routes");
 const transactionRoutes = require("./routes/transaction-routes");
+const tripRoutes = require("./routes/trip-routes");
 const fs = require('fs');
 const multer = require('multer');
 const app = express();
@@ -21,6 +22,7 @@ const start = async () => {
         app.use("/api/users", userRoutes);
         app.use('/uploads', express.static('uploads'));
         app.use("/api/transactions", transactionRoutes);
+        app.use("/api/trips", tripRoutes);
         app.listen(PORT, () => {
             console.log(`Server is running on port ${PORT}`);
         });

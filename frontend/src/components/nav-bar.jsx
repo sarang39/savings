@@ -28,22 +28,11 @@ export default function Nav() {
             console.error("Error fetching profile:", error);
         }
     }
-    useEffect(() => {
-        if (token) {
-            fetchProfile();
-        }
-        else {
-            navigate('/registration')
-        }
-        if (profileData.status === "pending") {
-            alert("Your account is pending approval. Please wait for an admin to approve your account.")
-            navigate('/waiting')
-        }
-    }, [token]);
+
     console.log("profile data in nav", profileData)
 
     function profile() {
-        navigate(`/profile/${id}`)
+        navigate(`/profile/${profileData._id}`)
     }
     function login() {
         setform(0)
@@ -78,9 +67,7 @@ export default function Nav() {
                                         </button>
                                     </div>
                                     <nav className="top">
-                                        <button onClick={() => navigate('/home')}>Home</button>
 
-                                        <button onClick={() => login()}>Login</button>
                                         <button onClick={() => profile()} style={{
                                             borderRadius: '100%',
                                             aspectRatio: '1/1',
@@ -88,14 +75,14 @@ export default function Nav() {
                                             border: '0%',
                                             margin: '0.5%'
                                         }}>
-                                            {userData && typeof userData === 'object' ?
+                                            {profileData && typeof profileData === 'object' ?
                                                 (
 
                                                     <img className="ring"
                                                         style={{ objectFit: "cover", width: "90%", height: '90%', borderRadius: '100%', aspectRatio: '1/1', padding: "0%" }}
                                                         src={
-                                                            userData.photo
-                                                                ? userData.photo
+                                                            profileData.photo
+                                                                ? profileData.photo
                                                                 : "https://www.shutterstock.com/image-vector/default-avatar-profile-icon-transparent-600nw-2463868847.jpg"
                                                         }
                                                         alt="profile" />
@@ -110,96 +97,361 @@ export default function Nav() {
                         </div >
 
 
-                        {/* Always render the wrapper, but toggle the "open" class */}
-                        < div className={`menu-overlay ${showMenu ? "open" : ""}`
-                        }>
+                        {/* MENU OVERLAY */}
 
-                            {/* Sidebar */}
-                            < div className="sidebar-menu" >
-                                {/* Top Section */}
-                                < div >
-                                    <h2
+                        <div
+                            className={`menu-overlay ${showMenu ? "open" : ""}`}
+                            style={{
+                                position: "fixed",
+                                top: 0,
+                                left: 0,
+                                width: "100%",
+                                height: "100vh",
+                                background: showMenu
+                                    ? "rgba(15, 23, 42, 0.65)"
+                                    : "transparent",
+
+                                backdropFilter: showMenu ? "blur(8px)" : "blur(0px)",
+
+                                display: "flex",
+
+                                zIndex: 9999,
+
+                                opacity: showMenu ? 1 : 0,
+
+                                pointerEvents: showMenu ? "all" : "none",
+
+                                transition: "0.4s ease",
+                            }}
+                        >
+
+                            {/* SIDEBAR */}
+
+                            <div
+                                className="sidebar-menu"
+                                style={{
+                                    width: "320px",
+                                    height: "100vh",
+
+                                    background:
+                                        "linear-gradient(180deg,#0F172A,#111827,#1E293B)",
+
+                                    borderRight:
+                                        "1px solid rgba(255,255,255,0.08)",
+
+                                    padding: "28px 22px",
+
+                                    display: "flex",
+                                    flexDirection: "column",
+                                    justifyContent: "space-between",
+
+                                    transform: showMenu
+                                        ? "translateX(0)"
+                                        : "translateX(-100%)",
+
+                                    transition: "0.4s ease",
+
+                                    boxShadow:
+                                        "0 20px 60px rgba(0,0,0,0.45)",
+
+                                    overflowY: "auto",
+                                }}
+                            >
+
+                                {/* TOP SECTION */}
+
+                                <div>
+
+                                    {/* LOGO */}
+
+                                    <div
                                         style={{
-                                            color: "#38bdf8",
-                                            marginBottom: "30px",
-                                            fontSize: "26px",
-                                            fontWeight: "bold",
+                                            marginBottom: "35px",
                                         }}
                                     >
-                                        Dashboard
-                                    </h2>
 
-                                    <nav
+                                        <h1
+                                            style={{
+                                                fontSize: "34px",
+                                                fontWeight: "800",
+
+                                                background:
+                                                    "linear-gradient(90deg,#6366F1,#8B5CF6,#06B6D4)",
+
+                                                WebkitBackgroundClip: "text",
+
+                                                WebkitTextFillColor: "transparent",
+
+                                                marginBottom: "10px",
+                                            }}
+                                        >
+                                            TripNest
+                                        </h1>
+
+                                        <p
+                                            style={{
+                                                color: "#94A3B8",
+                                                lineHeight: "1.7",
+                                                fontSize: "14px",
+                                            }}
+                                        >
+                                            Manage trips, group savings,
+                                            expenses, contributions,
+                                            and travel planning.
+                                        </p>
+
+                                    </div>
+
+                                    {/* USER CARD */}
+
+                                    <div
+                                        style={{
+                                            background: "rgba(255,255,255,0.05)",
+
+                                            border:
+                                                "1px solid rgba(255,255,255,0.08)",
+
+                                            borderRadius: "22px",
+
+                                            padding: "18px",
+
+                                            display: "flex",
+                                            alignItems: "center",
+                                            gap: "14px",
+
+                                            marginBottom: "30px",
+
+                                            backdropFilter: "blur(14px)",
+                                        }}
+                                    >
+
+                                        <div
+                                            style={{
+                                                width: "58px",
+                                                height: "58px",
+
+                                                borderRadius: "50%",
+
+                                                background:
+                                                    "linear-gradient(135deg,#6366F1,#06B6D4)",
+
+                                                display: "flex",
+                                                justifyContent: "center",
+                                                alignItems: "center",
+
+                                                fontWeight: "bold",
+                                                fontSize: "20px",
+
+                                                color: "white",
+                                            }}
+                                        >
+                                            R
+                                        </div>
+
+                                        <div>
+
+                                            <h3
+                                                style={{
+                                                    color: "white",
+                                                    marginBottom: "4px",
+                                                }}
+                                            >
+                                                Rahul
+                                            </h3>
+
+                                            <p
+                                                style={{
+                                                    color: "#94A3B8",
+                                                    fontSize: "14px",
+                                                }}
+                                            >
+                                                Group Admin
+                                            </p>
+
+                                        </div>
+
+                                    </div>
+
+                                    {/* NAVIGATION */}
+
+                                    <div
                                         style={{
                                             display: "flex",
                                             flexDirection: "column",
                                             gap: "12px",
                                         }}
                                     >
-                                        {[
-                                            { label: "Home", action: () => navigate("/home") },
-                                            { label: "Registration", action: () => navigate("/registration") },
-                                            { label: "Login", action: () => login() },
-                                            {
-                                                label: "Edit Profile",
-                                                action: () => setedit(edit === 1 ? 0 : 1),
-                                            },
-                                            { label: "Payment", action: () => navigate(`/payment/${id}`) },
-                                            { label: "Chatbot", action: () => navigate("/chatbot") },
-                                            { label: "Profile", action: () => profile() },
-                                            { label: "Contact", action: () => navigate("/contact") },
-                                            { label: "About", action: () => navigate("/about") },
+
+                                        {[{
+                                            label: "🆕 New Home",
+                                            action: () => navigate("/newhome"),
+                                        },
+                                        {
+                                            label: "👥 Group Details",
+                                            action: () => navigate("/groupdetail"),
+                                        },
+                                        {
+                                            label: "✈️ Create Trip",
+                                            action: () => navigate("/creategroup"),
+                                        },
+
+                                        {
+                                            label: "🧪 Test",
+                                            action: () => navigate("/profile"),
+                                        },
+                                        {
+                                            label: "💰 Add Contribution",
+                                            action: () => navigate("/addcontribution"),
+                                        },
+
+
+
+                                        { label: "loginn", action: () => navigate("/logi") },
+
+
+                                        {
+                                            label: "/landing",
+                                            action: () => navigate("/landing"),
+                                        },
+
+                                        {
+                                            label: "📊 Analytics",
+                                            action: () => navigate("/analytics"),
+                                        },
+
+                                        {
+                                            label: "🤖 AI Assistant",
+                                            action: () => navigate("/chatbot"),
+                                        },
+
+                                        {
+                                            label: "👤 Profile",
+                                            action: () => profile(),
+                                        },
+
+                                        {
+                                            label: "⚙️ Edit Profile",
+                                            action: () =>
+                                                setedit(edit === 1 ? 0 : 1),
+                                        },
+
+                                        {
+                                            label: "💵 Payments",
+                                            action: () =>
+                                                navigate(`/payment/${id}`),
+                                        },
+
+                                        {
+                                            label: "📞 Contact",
+                                            action: () => navigate("/contact"),
+                                        },
+                                        {
+                                            label: "ℹ️ About",
+                                            action: () => navigate("/about"),
+                                        },
                                         ].map((item, index) => (
                                             <button
                                                 key={index}
                                                 onClick={item.action}
                                                 style={{
-                                                    padding: "14px 16px",
-                                                    background: "#1e293b",
-                                                    color: "white",
-                                                    border: "none",
-                                                    borderRadius: "12px",
+                                                    padding: "16px 18px",
+                                                    background:
+                                                        "rgba(255,255,255,0.05)",
+                                                    border:
+                                                        "1px solid rgba(255,255,255,0.06)",
+                                                    color: "#E2E8F0",
+                                                    borderRadius: "18px",
                                                     cursor: "pointer",
                                                     fontSize: "15px",
+                                                    fontWeight: "600",
                                                     textAlign: "left",
                                                     transition: "0.3s",
-                                                    fontWeight: "500",
+                                                    backdropFilter: "blur(12px)",
+                                                    boxShadow:
+                                                        "0 6px 20px rgba(0,0,0,0.15)",
+                                                }}
+
+                                                onMouseEnter={(e) => {
+                                                    e.target.style.transform =
+                                                        "translateX(6px)"
+
+                                                    e.target.style.background =
+                                                        "linear-gradient(90deg,#6366F1,#8B5CF6)"
+
+                                                    e.target.style.color = "white"
+                                                }}
+
+                                                onMouseLeave={(e) => {
+                                                    e.target.style.transform =
+                                                        "translateX(0px)"
+
+                                                    e.target.style.background =
+                                                        "rgba(255,255,255,0.05)"
+
+                                                    e.target.style.color =
+                                                        "#E2E8F0"
                                                 }}
                                             >
                                                 {item.label}
                                             </button>
+
                                         ))}
-                                    </nav>
-                                </div >
 
-                                {/* Back Button */}
-                                < button
-                                    onClick={() => setShowMenu(false)}
-                                    style={{
-                                        display: "flex",
-                                        alignItems: "center",
-                                        justifyContent: "center",
-                                        gap: "8px",
-                                        padding: "12px",
-                                        background: "#38bdf8",
-                                        color: "#111827",
-                                        border: "none",
-                                        borderRadius: "12px",
-                                        cursor: "pointer",
-                                        fontSize: "16px",
-                                        fontWeight: "700",
-                                    }}
-                                >
-                                    ← Close Menu
-                                </button >
-                            </div >
+                                    </div>
 
-                            {/* Right Overlay Area (Clicking here closes the menu) */}
-                            < div
+                                </div>
+
+                                {/* BOTTOM SECTION */}
+
+                                <div>
+
+                                    <button
+                                        onClick={() => setShowMenu(false)}
+
+                                        style={{
+                                            width: "100%",
+
+                                            padding: "16px",
+
+                                            border: "none",
+
+                                            borderRadius: "18px",
+
+                                            background:
+                                                "linear-gradient(90deg,#06B6D4,#6366F1)",
+
+                                            color: "white",
+
+                                            fontWeight: "700",
+
+                                            cursor: "pointer",
+
+                                            fontSize: "16px",
+
+                                            transition: "0.3s",
+
+                                            boxShadow:
+                                                "0 10px 25px rgba(99,102,241,0.35)",
+                                        }}
+                                    >
+                                        ← Close Menu
+                                    </button>
+
+                                </div>
+
+                            </div>
+
+                            {/* RIGHT SIDE OVERLAY */}
+
+                            <div
                                 onClick={() => setShowMenu(false)}
-                                style={{ flex: 1 }}
+
+                                style={{
+                                    flex: 1,
+                                }}
                             />
-                        </div >
+
+                        </div>
 
 
                     </div >

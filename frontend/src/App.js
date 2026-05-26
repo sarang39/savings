@@ -13,6 +13,17 @@ import Cancel from './components/cancel';
 import axios from 'axios';
 import Chatbot from './components/chatbox';
 import WaitingApproval from './components/waitingforapproval'
+import TripNestLandingPage from './components/newidea/landingpage';
+import Register from './components/newidea/newregistration';
+import TripNestDashboard from './components/newidea/dashbord';
+import GroupDetails from './components/newidea/groupdetails'
+import AddContribution from './components/newidea/AddContribution';
+import AddExpense from './components/newidea/AddExpense';
+import CreateGroup from './components/newidea/CreateGroup';
+import LoginPage from './components/newidea/logi';
+import Test from './components/newidea/test';
+import NewHomePage from './components/newidea/newhome';
+
 
 
 function App() {
@@ -80,10 +91,19 @@ function App() {
 
             {
               token ?
-
                 <>
                   <Route path='/' element={<Home />} />
+                  <Route path='/test' element={<Test />} />
+                  <Route path='/landing' element={<TripNestLandingPage />} />
+                  <Route path='/regi' element={<Register />} />
+                  <Route path='/newhome' element={<NewHomePage />} />
 
+                  <Route path='/dashboard' element={<TripNestDashboard />} />
+                  <Route path='/groupdetail' element={<GroupDetails />} />
+                  <Route path='/addcontribution' element={<AddContribution />} />
+                  <Route path='/addexpense' element={<AddExpense />} />
+                  <Route path='/creategroup' element={<CreateGroup />} />
+                  <Route path='logi' element={<LoginPage />} />
                   <Route path='/registration' element={<Registration />} />
                   <Route path='/login' element={<Registration />} />
                   <Route path='/home' element={<Home />} />
@@ -100,7 +120,6 @@ function App() {
                     <Route path='/registration' element={<Registration />} />
                     <Route path='/login' element={<Registration />} />
                   </>
-
                 )
             }
 
