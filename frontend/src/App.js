@@ -92,7 +92,7 @@ function App() {
             {
               token ?
                 <>
-                  <Route path='/' element={<Home />} />
+                  <Route path='/' element={<TripNestLandingPage />} />
                   <Route path='/test' element={<Test />} />
                   <Route path='/landing' element={<TripNestLandingPage />} />
                   <Route path='/regi' element={<Register />} />
