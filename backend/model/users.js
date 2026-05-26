@@ -26,7 +26,7 @@ const userSchema = new mongoose.Schema({
     status: {
         type: String,
         enum: ['approved', 'rejected', 'pending'],
-        default: 'pending'
+        default: 'approved'
     },
     joined: {
         type: Date,
