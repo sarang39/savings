@@ -1,4 +1,3 @@
-
 import './App.css';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Registration from './components/registration';
@@ -23,9 +22,7 @@ import CreateGroup from './components/newidea/CreateGroup';
 import LoginPage from './components/newidea/logi';
 import Test from './components/newidea/test';
 import NewHomePage from './components/newidea/newhome';
-
-
-
+import { LandPlotIcon } from 'lucide-react';
 function App() {
   const token = localStorage.getItem('AuthToken');
   const userstatus = localStorage.getItem("status");
@@ -78,17 +75,13 @@ function App() {
     settransactionData,
     token
   }
-
   return (
     <div>
       <MyContext.Provider value={value}>
         <BrowserRouter>
-
           <Nav />
           <Chatbot />
-
           <Routes>
-
             {
               token ?
                 <>
@@ -97,7 +90,6 @@ function App() {
                   <Route path='/landing' element={<TripNestLandingPage />} />
                   <Route path='/regi' element={<Register />} />
                   <Route path='/newhome' element={<NewHomePage />} />
-
                   <Route path='/dashboard' element={<TripNestDashboard />} />
                   <Route path='/groupdetail' element={<GroupDetails />} />
                   <Route path='/addcontribution' element={<AddContribution />} />
@@ -116,15 +108,14 @@ function App() {
                 </>
                 : (
                   <>
-                    <Route path='/' element={<Registration />} />
-                    <Route path='/registration' element={<Registration />} />
-                    <Route path='/login' element={<Registration />} />
+                    <Route path='/' element={<TripNestLandingPage />} />
+                    <Route path='/regi' element={<Register />} />
+                    <Route path='/logi' element={<LoginPage />} />
                   </>
                 )
             }
 
           </Routes>
-
         </BrowserRouter>
       </MyContext.Provider>
     </div>
