@@ -148,10 +148,13 @@ export default function Register() {
                     <button type="submit">
                         Register
                     </button>
+                    <h4>
+                        Already have an account? <a href="/logi">Login here</a>
+                    </h4>
 
-                </form>
-            </div>
-        </div>
+                </form >
+            </div >
+        </div >
 
     );
 }

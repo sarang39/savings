@@ -164,8 +164,12 @@ export default function LoginPage() {
                     <button type="submit">
                         login
 
-                    </button>
+                    </button><h4>
+
+                        dont have an account? <a href="/regi">Register here</a>
+                    </h4>
                 </form>
+
             </div>
         </div>
 
