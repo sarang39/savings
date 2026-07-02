@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import {
     Server, Shield, Archive, Database, Activity,
@@ -8,7 +9,8 @@ import {
 import './groupdetails.css';
 
 export default function GroupDetails() {
-    const token = localStorage.getItem("AuthToken");
+    const navigate = useNavigate();
+    const [token, setToken] = useState(localStorage.getItem("AuthToken"));
 
     // 1. Initialized dashboard items with reasonable default/fallback empty values
     const [dashbordItems, setdashborditems] = useState({
@@ -27,8 +29,15 @@ export default function GroupDetails() {
     const [selectedId, setSelectedId] = useState(null);
     const [isSheetOpen, setIsSheetOpen] = useState(false);
     const [isMobile, setIsMobile] = useState(false);
+    const [tripId, settripId] = useState(null)
+    const [members, setmembers] = useState([])
+    const [showPopup, setShowPopup] = useState(false);
+
+    const inviteLink = `${window.location.origin}/joingroup/${selectedId}`;
+
 
     useEffect(() => {
+        setToken(localStorage.getItem("AuthToken"));
         const checkViewport = () => {
             const mobileView = window.innerWidth <= 768;
             setIsMobile(mobileView);
@@ -55,21 +64,25 @@ export default function GroupDetails() {
                 Totalsavings: selectedTrip.budget * 0.75, // Replace with dynamic backend logic/field if available
                 goalamount: selectedTrip.budget,
                 members: selectedTrip.memberCount,
+                totalmembers: selectedTrip.memberss,
                 remaining: selectedTrip.remaining,
                 Date: selectedTrip.formattedDate,
                 budgetoverview: 75 // Replace with dynamic budget calculations if needed
             });
+            setmembers(selectedTrip.memberss)
         }
     };
 
     const activeDataset = triplist.find(item => item.id === selectedId);
-
+    console.log("members::", members);
     useEffect(() => {
         if (token) {
             gettrips();
         }
     }, [token]);
-
+    const addmember = () => {
+        setShowPopup(true);
+    };
     // 4. Injected response handling to capture database records into state
     async function gettrips() {
         try {
@@ -112,6 +125,7 @@ export default function GroupDetails() {
                         summary: trip.description || "No description provided.",
                         budget: trip.budget || 0,
                         memberCount: trip.members ? trip.members.length : 1,
+                        memberss: trip.members || [],
                         year: tripDate.getFullYear() || "2026",
                         formattedDate: tripDate.toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })
                     };
@@ -140,9 +154,127 @@ export default function GroupDetails() {
             alert("Server Error loading trips.");
         }
     }
+    function paymentpage() {
+        navigate(`/payment/${selectedId}`, { state: members });
+    }
 
     return (
         <div className="adaptive-app-wrapper">
+            {showPopup && (
+                <div
+                    className='hero-content'
+                    style={{
+                        position: "fixed",
+                        top: 0,
+                        left: 0,
+                        width: "100%",
+                        height: "100%",
+                        background: "rgba(0,0,0,0.45)",
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        zIndex: 9999,
+                    }}
+
+                >
+                    <div
+                        style={{
+                            width: "350px",
+                            background: "#ffffffb1",
+                            borderRadius: "12px",
+                            padding: "20px",
+                            boxShadow: "0 8px 25px rgba(0,0,0,0.2)",
+                            position: "relative",
+                        }}
+                    >
+                        <button
+                            onClick={() => setShowPopup(false)}
+                            style={{
+                                position: "absolute",
+                                top: "10px",
+                                right: "10px",
+                                border: "none",
+                                background: "transparent",
+                                fontSize: "18px",
+                                cursor: "pointer",
+                            }}
+                        >
+                            ✕
+                        </button>
+
+                        <h3 style={{ marginBottom: "15px" }}>Invite Member</h3>
+
+                        <input
+                            type="text"
+                            value={inviteLink}
+                            readOnly
+                            style={{
+                                width: "100%",
+                                padding: "10px",
+                                border: "1px solid #ccc",
+                                borderRadius: "6px",
+                                marginBottom: "15px",
+                                boxSizing: "border-box",
+                            }}
+                        />
+
+                        <div
+                            style={{
+                                display: "flex",
+                                gap: "10px",
+                            }}
+                        >
+                            <button
+                                onClick={() => {
+                                    navigator.clipboard.writeText(inviteLink);
+                                    alert("Link copied!");
+                                }}
+                                style={{
+                                    flex: 1,
+                                    padding: "10px",
+                                    border: "none",
+                                    borderRadius: "6px",
+                                    background: "#007bff",
+                                    color: "#fff",
+                                    cursor: "pointer",
+                                }}
+                            >
+                                Copy Link
+                            </button>
+
+                            <button
+                                onClick={async () => {
+                                    if (navigator.share) {
+                                        try {
+                                            await navigator.share({
+                                                title: "Join our Trip",
+                                                text: "Click the link below to join our trip.",
+                                                url: inviteLink,
+                                            });
+                                        } catch (err) {
+                                            console.log(err);
+                                        }
+                                    } else {
+                                        navigator.clipboard.writeText(inviteLink);
+                                        alert("Sharing isn't supported. Link copied!");
+                                    }
+                                }}
+                                style={{
+                                    flex: 1,
+                                    padding: "10px",
+                                    border: "none",
+                                    borderRadius: "6px",
+                                    background: "#28a745",
+                                    color: "#fff",
+                                    cursor: "pointer",
+                                }}
+                            >
+                                Share
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
             {/* ================= MASTER SIDEBAR ================= */}
             <aside className="master-sidebar-pane">
                 <header className="app-branding-bar">
@@ -162,6 +294,7 @@ export default function GroupDetails() {
                         triplist.map((item, index) => {
                             const isSelected = item.id === selectedId;
                             const Icon = item.icon;
+
 
                             return (
                                 <button
@@ -198,9 +331,13 @@ export default function GroupDetails() {
                                 <h1>{dashbordItems.tripname} Vacation {dashbordItems.year}</h1>
                                 <p>Manage group savings, expenses, trip planning, and financial transparency for your entire travel team.</p>
                             </div>
+                            <button className="primary-btn" onClick={() => { paymentpage() }}>Payment</button>
                             <div className="hero-buttons">
-                                <button className="primary-btn">+ Add Member</button>
-                                <button className="secondary-btn">Edit Group</button>
+                                <button className="secondary-btn" onClick={() => addmember()}>
+                                    + Add Member
+                                </button>
+
+
                             </div>
                         </div>
                     </div>
@@ -217,6 +354,12 @@ export default function GroupDetails() {
                             <h2>₹{dashbordItems.goalamount}</h2>
                             <span>75% completed</span>
                         </div>
+                        <div className="pro-card stat-card">
+                            <p>Current Expence</p>
+                            <h2>{dashbordItems.members}</h2>
+                            <span>5% completed</span>
+                        </div>
+
                         <div className="pro-card stat-card">
                             <p>Total Members</p>
                             <h2>{dashbordItems.members}</h2>

@@ -39,6 +39,12 @@ const tripDetailsSchema = new mongoose.Schema({
     description: {
         type: String,
         required: true
+    },
+    inviteCode: {
+        type: String,
+        required: true,
+        default: "test"
     }
+
 });
 module.exports = mongoose.model('tripdetails', tripDetailsSchema);

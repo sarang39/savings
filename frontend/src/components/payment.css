@@ -1,24 +1,218 @@
-.paymentcontainer {
+/* Core View Container - Fixed viewport to stop page down scrolling layout behavior */
+.payment-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100vw;
+    box-sizing: border-box;
+    padding: 24px;
+    color: #ffffff;
+    background-color: #0d0f1a;
+    /* Dark uniform backdrop */
+    overflow: hidden;
+}
+
+/* Fluid Adaptive Layout Panel Frame */
+.payment-card {
+    background: linear-gradient(145deg, #181b2c, #111422);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 20px;
+    padding: 30px;
+    width: 100%;
+    max-width: 1100px;
+    /* Stretches wide like your laptop console dashboard */
+    box-sizing: border-box;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-    background-color: #F5F5F5;
+    justify-content: space-between;
 }
 
-.paymentcontainer>button {
-    background-color: #D4AF37;
-    color: #111827;
-    border: none;
-    padding: 12px 25px;
-    font-size: 16px;
-    border-radius: 6px;
+.payment-header {
+    margin-bottom: 20px;
+}
+
+.payment-title {
+    font-size: 1.75rem;
+    margin: 0 0 4px 0;
+    font-weight: 600;
+}
+
+.payment-subtitle {
+    color: #8b9bb4;
+    font-size: 0.9rem;
+    margin: 0;
+}
+
+.payment-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Two-Column Responsive Grid Architecture */
+.form-main-layout {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 30px;
+}
+
+.form-column {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-row {
+    display: flex;
+    gap: 15px;
+}
+
+.form-group.half {
+    flex: 1;
+}
+
+label {
+    font-size: 0.8rem;
+    color: #a0aec0;
+    margin-bottom: 6px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+input,
+select,
+textarea {
+    background: #0d0f1a;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 12px 14px;
+    border-radius: 10px;
+    color: white;
+    font-size: 0.95rem;
+    transition: all 0.25s ease;
+    box-sizing: border-box;
+    width: 100%;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 8px rgba(59, 130, 246, 0.3);
+}
+
+/* Dynamic Textarea Scaling to maintain card height bounds */
+textarea {
+    resize: none;
+    flex-grow: 1;
+    min-height: 90px;
+}
+
+.operational-notes {
+    flex-grow: 1;
+}
+
+/* User Selection Array Interface */
+.participants-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.participant-chip {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 10px 16px;
+    border-radius: 12px;
     cursor: pointer;
-    transition: all 0.3s ease;
+    font-size: 0.85rem;
+    transition: all 0.2s ease;
+    user-select: none;
 }
 
-.paymentcontainer>button:hover {
-    background-color: #C9A227;
-    transform: translateY(-2px);
+.participant-chip:hover {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.participant-chip.active {
+    background: #3b82f6;
+    border-color: #3b82f6;
+    color: white;
+    font-weight: 500;
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+}
+
+/* Footer Control Layout */
+.button-group {
+    display: flex;
+    gap: 15px;
+    margin-top: 10px;
+}
+
+button {
+    padding: 14px;
+    border-radius: 12px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: none;
+}
+
+.btn-primary {
+    background: #3b82f6;
+    color: white;
+}
+
+.btn-primary:hover {
+    background: #2563eb;
+    transform: translateY(-1px);
+}
+
+.btn-secondary {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: white;
+}
+
+.btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.05);
+    transform: translateY(-1px);
+}
+
+/* --- Media Queries: Mobile Device Adaptation --- */
+@media (max-width: 768px) {
+    .payment-container {
+        overflow-y: auto;
+        /* Fallback safe scroll constraint exclusively for smaller heights */
+        height: auto;
+        min-height: 100vh;
+    }
+
+    .payment-card {
+        padding: 20px;
+    }
+
+    .form-main-layout {
+        grid-template-columns: 1fr;
+        /* Stacks into single sequential column map on phones */
+        gap: 16px;
+    }
+
+    .button-group {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    button {
+        width: 100%;
+    }
 }

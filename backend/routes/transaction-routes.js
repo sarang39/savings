@@ -3,7 +3,7 @@ const router = express.Router();
 const transactionController = require("../controllers/transaction-controller");
 const { userMiddleware, adminpriority } = require("../Middleware/UserMiddleWare");
 // create
-router.post("/createTransaction", userMiddleware, transactionController.createTransaction);
+router.post("/createTransaction/:id", userMiddleware, transactionController.createTransaction);
 // list
 router.get("/listTransactions", transactionController.getAllTransactions);
 // single

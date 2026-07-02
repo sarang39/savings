@@ -29,7 +29,7 @@ const memories = [
     },
 ];
 
-function HomePage() {
+function NewHomePage() {
     return (
         <div className="home-container">
             {/* Hero Section */}
@@ -129,4 +129,4 @@ function HomePage() {
     );
 }
 
-export default HomePage;
+export default NewHomePage;

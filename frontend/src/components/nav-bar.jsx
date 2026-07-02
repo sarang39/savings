@@ -68,7 +68,7 @@ export default function Nav() {
                                     </div>
                                     <nav className="top">
 
-                                        <button onClick={() => profile()} style={{
+                                        {/* <button onClick={() => profile()} style={{
                                             borderRadius: '100%',
                                             aspectRatio: '1/1',
                                             padding: "0%",
@@ -89,7 +89,7 @@ export default function Nav() {
 
                                                 ) : (
                                                     <p>Loading...</p>
-                                                )}</button>
+                                                )}</button> */}
 
                                     </nav>
                                 </div>
@@ -294,7 +294,10 @@ export default function Nav() {
                                             label: "✈️ Create Trip",
                                             action: () => navigate("/creategroup"),
                                         },
-
+                                        {
+                                            label: "👥 Join Group",
+                                            action: () => navigate("/joingroup"),
+                                        },
                                         {
                                             label: "🧪 Test",
                                             action: () => navigate("/profile"),

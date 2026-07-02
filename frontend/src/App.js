@@ -22,7 +22,9 @@ import CreateGroup from './components/newidea/CreateGroup';
 import LoginPage from './components/newidea/logi';
 import Test from './components/newidea/test';
 import NewHomePage from './components/newidea/newhome';
+
 import { LandPlotIcon } from 'lucide-react';
+import JoinGroup from './components/newidea/joiningpage';
 function App() {
   const token = localStorage.getItem('AuthToken');
   const userstatus = localStorage.getItem("status");
@@ -34,9 +36,6 @@ function App() {
   const [photo, setphoto] = useState(null)
   const [otp, setOtp] = useState(null);
   const [edit, setedit] = useState(0)
-  // userData holds the currently authenticated user's profile information.
-  // we start with an empty object rather than an array to match the shape
-  // returned by the server and avoid .map() errors.
   const [userData, setUserData] = useState({})
   const [mapuser, setmapuser] = useState([])
   const [profileData, setProfileData] = useState({})
@@ -86,6 +85,7 @@ function App() {
               token ?
                 <>
                   <Route path='/' element={<TripNestLandingPage />} />
+                  <Route path='/joingroup/:tripId' element={<JoinGroup />} />
                   <Route path='/test' element={<Test />} />
                   <Route path='/landing' element={<TripNestLandingPage />} />
                   <Route path='/regi' element={<Register />} />
@@ -102,8 +102,7 @@ function App() {
                   <Route path='/profile/:id' element={<Profile />} />
                   <Route path='/success/:id' element={<Success />} />
                   <Route path='/cancel/:id' element={<Cancel />} />
-                  <Route path='/payment/:id' element={<Payment />} />
-                  <Route path='/chatbot' element={<Chatbot />} />
+                  <Route path='/payment/:tripId' element={<Payment />} />
                   <Route path='/waiting' element={<WaitingApproval />} />
                 </>
                 : (
@@ -114,7 +113,6 @@ function App() {
                   </>
                 )
             }
-
           </Routes>
         </BrowserRouter>
       </MyContext.Provider>
