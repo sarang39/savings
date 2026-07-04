@@ -76,7 +76,7 @@ export default function AddExpense() {
 
                             <div className="input-box">
 
-                                <label>Paid By</label>
+                                <label>Split By</label>
 
                                 <input
                                     type="text"

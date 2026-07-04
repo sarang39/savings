@@ -384,11 +384,40 @@ const paymentWithStripe = async (req, res) => {
   }
 };
 
+const getTripTotalAmount = async (req, res) => {
+  try {
+    const { tripId } = req.params;
+
+    const result = await Transaction.aggregate([
+      {
+        $match: {
+          // Uses the model's base mongoose instance directly
+          trip: new Transaction.base.Types.ObjectId(tripId),
+          isDeleted: false
+        }
+      },
+      {
+        $group: {
+          _id: null,
+          totalAmount: { $sum: "$amount" }
+        }
+      }
+    ]);
+
+    const totalAmount = result[0]?.totalAmount || 0;
+    return res.status(200).json({ totalAmount });
+  } catch (err) {
+    console.error("Error in getTripTotalAmount:", err);
+    return res.status(500).json({ message: "Server error while calculating trip total" });
+  }
+};
+
 module.exports = {
   createTransaction,
   getAllTransactions,
   getTransactionById,
   allcalculations,
   Editpayment,
-  paymentWithStripe
+  paymentWithStripe,
+  getTripTotalAmount
 };

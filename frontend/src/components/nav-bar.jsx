@@ -6,6 +6,11 @@ import { useContext } from "react";
 import { MyContext } from "./Mycontext";
 import axios from "axios";
 export default function Nav() {
+    useEffect(() => {
+        if (token) {
+            fetchProfile();
+        }
+    }, []);
 
     const navigate = useNavigate();
     const { profileData, edit, setedit, setform, userData, setProfileData, } = useContext(MyContext)
@@ -205,73 +210,74 @@ export default function Nav() {
                                     {/* USER CARD */}
 
                                     <div
+                                        onClick={() => profile()}
                                         style={{
                                             background: "rgba(255,255,255,0.05)",
-
-                                            border:
-                                                "1px solid rgba(255,255,255,0.08)",
-
+                                            border: "1px solid rgba(255,255,255,0.08)",
                                             borderRadius: "22px",
-
                                             padding: "18px",
-
                                             display: "flex",
                                             alignItems: "center",
                                             gap: "14px",
-
                                             marginBottom: "30px",
-
                                             backdropFilter: "blur(14px)",
+                                            cursor: "pointer",
+                                            transition: "0.3s ease"
                                         }}
                                     >
 
-                                        <div
+                                        <img
+                                            src={
+                                                profileData?.photo
+                                                    ? profileData.photo
+                                                    : "https://www.shutterstock.com/image-vector/default-avatar-profile-icon-transparent-600nw-2463868847.jpg"
+                                            }
+                                            alt="Profile"
                                             style={{
                                                 width: "58px",
                                                 height: "58px",
-
                                                 borderRadius: "50%",
+                                                objectFit: "cover",
+                                                border: "3px solid #6366F1",
+                                                boxShadow: "0 0 15px rgba(99,102,241,.35)"
+                                            }}
+                                        />
 
-                                                background:
-                                                    "linear-gradient(135deg,#6366F1,#06B6D4)",
-
-                                                display: "flex",
-                                                justifyContent: "center",
-                                                alignItems: "center",
-
-                                                fontWeight: "bold",
-                                                fontSize: "20px",
-
-                                                color: "white",
+                                        <div
+                                            onClick={() => profile()}
+                                            style={{
+                                                overflow: "hidden",
+                                                flex: 1
                                             }}
                                         >
-                                            R
-                                        </div>
-
-                                        <div>
-
                                             <h3
                                                 style={{
                                                     color: "white",
-                                                    marginBottom: "4px",
+                                                    margin: 0,
+                                                    fontSize: "18px",
+                                                    whiteSpace: "nowrap",
+                                                    overflow: "hidden",
+                                                    textOverflow: "ellipsis"
                                                 }}
                                             >
-                                                Rahul
+                                                {profileData?.name || "User"}
                                             </h3>
 
                                             <p
                                                 style={{
                                                     color: "#94A3B8",
                                                     fontSize: "14px",
+                                                    marginTop: "5px",
+                                                    whiteSpace: "nowrap",
+                                                    overflow: "hidden",
+                                                    textOverflow: "ellipsis"
                                                 }}
                                             >
-                                                Group Admin
+                                                {profileData?.email || "No Email"}
                                             </p>
-
                                         </div>
 
                                     </div>
-
                                     {/* NAVIGATION */}
 
                                     <div

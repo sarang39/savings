@@ -14,5 +14,7 @@ router.get("/allcalculations", transactionController.allcalculations)
 router.put("/editpayment/:id", adminpriority, transactionController.Editpayment)
 //paymentp with stripe
 router.post("/pay", transactionController.paymentWithStripe)
+//get trip total by id
+router.get("/TripTotalAmount/:tripId", transactionController.getTripTotalAmount)
 
 module.exports = router

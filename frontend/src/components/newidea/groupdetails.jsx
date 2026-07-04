@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, use } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import {
@@ -11,7 +11,7 @@ import './groupdetails.css';
 export default function GroupDetails() {
     const navigate = useNavigate();
     const [token, setToken] = useState(localStorage.getItem("AuthToken"));
-
+    const [totalAmount, setTotalAmount] = useState(0);
     // 1. Initialized dashboard items with reasonable default/fallback empty values
     const [dashbordItems, setdashborditems] = useState({
         tripname: "Select a Trip",
@@ -157,7 +157,32 @@ export default function GroupDetails() {
     function paymentpage() {
         navigate(`/payment/${selectedId}`, { state: members });
     }
+    async function getTripTotalAmount(tripId) {
+        try {
+            const response = await axios.get(
+                `${process.env.REACT_APP_API}/api/transactions/TripTotalAmount/${tripId}`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                }
+            );
 
+            console.log(response.data);
+
+            setTotalAmount(response.data.totalAmount);
+
+        } catch (err) {
+            console.log("Get Trip Total Error:", err);
+            setTotalAmount(0);
+            alert("Server Error loading trip total.");
+        }
+    }
+    useEffect(() => {
+        if (selectedId) {
+            getTripTotalAmount(selectedId);
+        }
+    }, [selectedId]);
     return (
         <div className="adaptive-app-wrapper">
             {showPopup && (
@@ -294,8 +319,6 @@ export default function GroupDetails() {
                         triplist.map((item, index) => {
                             const isSelected = item.id === selectedId;
                             const Icon = item.icon;
-
-
                             return (
                                 <button
                                     key={item.id || index}
@@ -318,7 +341,6 @@ export default function GroupDetails() {
                     )}
                 </nav>
             </aside>
-
             {/* ================= DESKTOP DETAILS WORKSPACE ================= */}
             <div className="pro-page">
                 <div className="pro-container">
@@ -336,12 +358,9 @@ export default function GroupDetails() {
                                 <button className="secondary-btn" onClick={() => addmember()}>
                                     + Add Member
                                 </button>
-
-
                             </div>
                         </div>
                     </div>
-
                     {/* STATS */}
                     <div className="stats-grid">
                         <div className="pro-card stat-card">
@@ -356,7 +375,7 @@ export default function GroupDetails() {
                         </div>
                         <div className="pro-card stat-card">
                             <p>Current Expence</p>
-                            <h2>{dashbordItems.members}</h2>
+                            <h2>₹{totalAmount}</h2>
                             <span>5% completed</span>
                         </div>
 
