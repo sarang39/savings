@@ -57,6 +57,7 @@ export default function AddContribution() {
                 setDescription('');
                 setCategory('other');
                 setNotes('');
+
             }
         } catch (error) {
             console.error("Contribution Error:", error);
@@ -66,6 +67,7 @@ export default function AddContribution() {
             setLoading(false);
         }
     };
+
 
     return (
         <div className="pro-page">

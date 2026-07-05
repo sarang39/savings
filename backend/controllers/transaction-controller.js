@@ -196,6 +196,7 @@
 const Transaction = require("../model/transactions");
 const User = require("../model/users");
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
+const mongoose = require('mongoose');
 
 // Simple fallback split calculation helper if ExpenseService is not defined
 const calculateEqualSplitHelper = (amount, participants) => {
@@ -427,34 +428,82 @@ const paymentWithStripe = async (req, res) => {
   }
 };
 
-const getTripTotalAmount = async (req, res) => {
+// const getTripTotalExpenseAmount = async (req, res) => {
+//   try {
+//     const { tripId } = req.params;
+
+//     const result = await Transaction.aggregate([
+//       {
+//         $match: {
+//           trip: new mongoose.Types.ObjectId(tripId),
+//           type: "expense", // Filter out contributions and p2p transfers
+//           isDeleted: false
+//         }
+//       },
+//       {
+//         $group: {
+//           _id: null,
+//           totalAmount: { $sum: "$amount" }
+//         }
+//       },
+
+//     ], [{
+//       $match: {
+//         trip: new mongoose.Types.ObjectId(tripId),
+//         type: "contribution", // Filter out contributions and p2p transfers
+//         isDeleted: false
+//       }
+//     },
+//     {
+//       $group: {
+//         _id: null,
+//         contribution: { $sum: "$amount" }
+//       }
+//     },]);
+
+//     const totalAmount = result.length > 0 ? result[0].totalAmount : 0;
+//     const contributionAmount = result.length > 1 ? result[1].contribution : 0;
+//     return res.status(200).json({ totalAmount, contributionAmount });
+//   } catch (err) {
+//     console.error("Error in getTripTotalExpenseAmount:", err);
+//     return res.status(500).json({ message: "Server error while calculating trip total" });
+//   }
+// };
+const getTripTotalExpenseAmount = async (req, res) => {
   try {
     const { tripId } = req.params;
 
     const result = await Transaction.aggregate([
       {
         $match: {
-          // Uses the model's base mongoose instance directly
-          trip: new Transaction.base.Types.ObjectId(tripId),
+          trip: new mongoose.Types.ObjectId(tripId),
           isDeleted: false
         }
       },
       {
-        $group: {
-          _id: null,
-          totalAmount: { $sum: "$amount" }
+        $facet: {
+          expenses: [
+            { $match: { type: "expense" } },
+            { $group: { _id: null, totalAmount: { $sum: "$amount" } } }
+          ],
+          contributions: [
+            { $match: { type: "contribution" } },
+            { $group: { _id: null, totalAmount: { $sum: "$amount" } } }
+          ]
         }
       }
     ]);
 
-    const totalAmount = result[0]?.totalAmount || 0;
-    return res.status(200).json({ totalAmount });
+    // Extract the data from the facet arrays safely
+    const totalAmount = result[0]?.expenses[0]?.totalAmount || 0;
+    const contributionAmount = result[0]?.contributions[0]?.totalAmount || 0;
+
+    return res.status(200).json({ totalAmount, contributionAmount });
   } catch (err) {
-    console.error("Error in getTripTotalAmount:", err);
+    console.error("Error in getTripTotalExpenseAmount:", err);
     return res.status(500).json({ message: "Server error while calculating trip total" });
   }
 };
-
 
 module.exports = {
   createTransaction,
@@ -463,6 +512,6 @@ module.exports = {
   allcalculations,
   Editpayment,
   paymentWithStripe,
-  getTripTotalAmount,
+  getTripTotalExpenseAmount,
   createcontributiondirectdb
 };

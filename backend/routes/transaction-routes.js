@@ -15,7 +15,7 @@ router.put("/editpayment/:id", adminpriority, transactionController.Editpayment)
 //paymentp with stripe
 router.post("/pay", transactionController.paymentWithStripe)
 //get trip total by id
-router.get("/TripTotalAmount/:tripId", transactionController.getTripTotalAmount)
+router.get("/TripTotalExpenseAmount/:tripId", transactionController.getTripTotalExpenseAmount)
 //create contribution direct db
 router.post("/createcontributiondirectdb/:tripId", userMiddleware, transactionController.createcontributiondirectdb)
 

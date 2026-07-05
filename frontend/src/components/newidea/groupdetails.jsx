@@ -32,6 +32,7 @@ export default function GroupDetails() {
     const [tripId, settripId] = useState(null)
     const [members, setmembers] = useState([])
     const [showPopup, setShowPopup] = useState(false);
+    const [contributionAmount, setContributionAmount] = useState(0);
 
     const inviteLink = `${window.location.origin}/joingroup/${selectedId}`;
 
@@ -74,7 +75,7 @@ export default function GroupDetails() {
     };
 
     const activeDataset = triplist.find(item => item.id === selectedId);
-    console.log("members::", members);
+
     useEffect(() => {
         if (token) {
             gettrips();
@@ -157,10 +158,13 @@ export default function GroupDetails() {
     function paymentpage() {
         navigate(`/payment/${selectedId}`, { state: members });
     }
+    function contribution() {
+        navigate(`/addcontribution/${selectedId}`, { state: members });
+    }
     async function getTripTotalAmount(tripId) {
         try {
             const response = await axios.get(
-                `${process.env.REACT_APP_API}/api/transactions/TripTotalAmount/${tripId}`,
+                `${process.env.REACT_APP_API}/api/transactions/TripTotalExpenseAmount/${tripId}`,
                 {
                     headers: {
                         Authorization: `Bearer ${token}`
@@ -171,6 +175,7 @@ export default function GroupDetails() {
             console.log(response.data);
 
             setTotalAmount(response.data.totalAmount);
+            setContributionAmount(response.data.contributionAmount);
 
         } catch (err) {
             console.log("Get Trip Total Error:", err);
@@ -178,11 +183,32 @@ export default function GroupDetails() {
             alert("Server Error loading trip total.");
         }
     }
+
+    // async function getTripContributionAmount(tripId) {
+    //     console.log("Function called with:", tripId);
+
+    //     try {
+    //         const response = await axios.get(
+    //             `${process.env.REACT_APP_API}/api/transactions/TripContributionAmount/${tripId}`,
+    //             {
+    //                 headers: {
+    //                     Authorization: `Bearer ${token}`
+    //                 }
+    //             }
+    //         );
+
+    //         console.log("Contribution Amount:", response.data);
+    //         setContributionAmount(response.data.totalAmount);
+    //     } catch (err) {
+    //         console.log("Error:", err);
+    //     }
+    // }
     useEffect(() => {
         if (selectedId) {
             getTripTotalAmount(selectedId);
         }
     }, [selectedId]);
+
     return (
         <div className="adaptive-app-wrapper">
             {showPopup && (
@@ -353,7 +379,8 @@ export default function GroupDetails() {
                                 <h1>{dashbordItems.tripname} Vacation {dashbordItems.year}</h1>
                                 <p>Manage group savings, expenses, trip planning, and financial transparency for your entire travel team.</p>
                             </div>
-                            <button className="primary-btn" onClick={() => { paymentpage() }}>Payment</button>
+                            <button className="primary-btn" onClick={() => { contribution() }}>Add Contribution</button>
+                            <button className="primary-btn" onClick={() => { paymentpage() }}>Add Expense</button>
                             <div className="hero-buttons">
                                 <button className="secondary-btn" onClick={() => addmember()}>
                                     + Add Member
@@ -364,19 +391,19 @@ export default function GroupDetails() {
                     {/* STATS */}
                     <div className="stats-grid">
                         <div className="pro-card stat-card">
-                            <p>Total Savings</p>
-                            <h2>₹{dashbordItems.Totalsavings}</h2>
-                            <span>+12% this month</span>
-                        </div>
-                        <div className="pro-card stat-card">
                             <p>Goal Amount</p>
                             <h2>₹{dashbordItems.goalamount}</h2>
                             <span>75% completed</span>
                         </div>
                         <div className="pro-card stat-card">
-                            <p>Current Expence</p>
+                            <p>Current Expense</p>
                             <h2>₹{totalAmount}</h2>
                             <span>5% completed</span>
+                        </div>
+                        <div className="pro-card stat-card">
+                            <p>Current Contribution</p>
+                            <h2>₹{contributionAmount}</h2>
+                            <span>10% completed</span>
                         </div>
 
                         <div className="pro-card stat-card">
@@ -425,21 +452,40 @@ export default function GroupDetails() {
                                     <button className="small-btn">View All</button>
                                 </div>
                                 <div className="members-list">
-                                    <div className="member-row">
-                                        <div className="member-left">
-                                            <div className="avatar">R</div>
-                                            <div>
-                                                <h4>Rahul</h4>
-                                                <p>Group Admin</p>
-                                            </div>
-                                        </div>
-                                        <div className="member-right">
-                                            <h3>₹15,000</h3>
-                                            <div className="member-progress">
-                                                <div className="progress-fill" style={{ width: '75%' }}></div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    {members && members.filter(m => m.status === 'approved').length === 0 ? (
+                                        <p style={{ color: '#888', padding: '10px 0' }}>No approved members yet.</p>
+                                    ) : (
+                                        members
+                                            // 1. Filter out any members whose status is not 'approved'
+                                            .filter(member => member.status === 'approved')
+                                            .map((member, index) => {
+                                                const memberName = member.user && member.user.name ? member.user.name : "Unknown Member";
+                                                const initial = memberName.charAt(0).toUpperCase();
+
+                                                // 2. Determine if this member is the trip leader/admin
+                                                // Checks against the activeDataset's leader property parsed from your gettrips function
+                                                const isLeader = activeDataset?.leader?.id === member.user?._id || index === 0;
+                                                const roleText = isLeader ? "Admin / Creator" : "Member";
+
+                                                return (
+                                                    <div className="member-row" key={member._id || index}>
+                                                        <div className="member-left">
+                                                            <div className="avatar">{initial}</div>
+                                                            <div>
+                                                                <h4>{memberName}</h4>
+                                                                <p style={{ color: isLeader ? '#007bff' : '#666' }}>{roleText}</p>
+                                                            </div>
+                                                        </div>
+                                                        <div className="member-right">
+                                                            <h3>₹0</h3>
+                                                            <div className="member-progress">
+                                                                <div className="progress-fill" style={{ width: '100%' }}></div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                );
+                                            })
+                                    )}
                                 </div>
                             </div>
                         </div>
