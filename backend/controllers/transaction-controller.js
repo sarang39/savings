@@ -235,6 +235,7 @@ const createTransaction = async (req, res, next) => {
     const transaction = new Transaction({
       trip,
       paidBy,
+      type: "expense", // Assuming a default type; adjust as needed
       amount: parseFloat(amount),
       description,
       category: category ? category.toLowerCase() : "other",
@@ -251,6 +252,46 @@ const createTransaction = async (req, res, next) => {
     next(err);
   }
 };
+const createcontributiondirectdb = async (req, res, next) => {
+  try {
+    const {
+      trip,
+      amount,
+      description,
+      category, // 💡 FIX 1: You forgot to pull category out of req.body here!
+      receiptUrl,
+      notes
+    } = req.body;
+
+    console.log("body in contribution creation:", req.body);
+
+    const paidBy = req.userId;
+
+    // Validate mandatory fields
+    if (!trip || !amount) {
+      return res.status(400).json({ message: "Missing required fields: trip or amount." });
+    }
+
+    const transaction = new Transaction({
+      trip,
+      paidBy,
+      type: "contribution",
+      amount: parseFloat(amount),
+      description: description || "Group Contribution Pool",
+      category: category ? category.toLowerCase() : "other", // This won't crash anymore
+      participants: [],
+      splitType: "equal",
+      splitDetails: [],
+      receiptUrl: receiptUrl || null,
+      notes: notes || ""
+    });
+
+    await transaction.save();
+    return res.status(201).json(transaction);
+  } catch (err) {
+    next(err); // Forwards any remaining execution errors out cleanly
+  }
+};
 
 // 2. Get all transactions - Properly populating 'paidBy' field from schema
 const getAllTransactions = async (req, res) => {
@@ -264,6 +305,8 @@ const getAllTransactions = async (req, res) => {
     res.status(500).json({ message: "Server error while fetching transactions" });
   }
 };
+
+
 
 // 3. Get single transaction by ID or filter by dynamic paidBy parameter
 const getTransactionById = async (req, res) => {
@@ -373,8 +416,8 @@ const paymentWithStripe = async (req, res) => {
         category: category || "other",
         participants: JSON.stringify(participants || [])
       },
-      success_url: "http://localhost:3000/success?session_id={CHECKOUT_SESSION_ID}",
-      cancel_url: "http://localhost:3000/cancel",
+      success_url: "https://savings-vnq5.vercel.app/success?session_id={CHECKOUT_SESSION_ID}",
+      cancel_url: "https://savings-vnq5.vercel.app/cancel",
     });
 
     res.status(200).json({ url: session.url });
@@ -412,6 +455,7 @@ const getTripTotalAmount = async (req, res) => {
   }
 };
 
+
 module.exports = {
   createTransaction,
   getAllTransactions,
@@ -419,5 +463,6 @@ module.exports = {
   allcalculations,
   Editpayment,
   paymentWithStripe,
-  getTripTotalAmount
+  getTripTotalAmount,
+  createcontributiondirectdb
 };

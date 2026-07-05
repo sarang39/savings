@@ -13,6 +13,10 @@ const transactionSchema = new mongoose.Schema({
         ref: "User",
         required: true
     },
+    type: {
+        type: String,
+        enum: ["expense", "contribution", "p2p"],
+    },
 
     amount: {
         type: Number,
@@ -65,6 +69,7 @@ const transactionSchema = new mongoose.Schema({
 
     receiptUrl: {
         type: String,
+
         default: null
     },
 
@@ -84,33 +89,3 @@ const transactionSchema = new mongoose.Schema({
 const Transaction = mongoose.model("transaction", transactionSchema)
 
 module.exports = Transaction;
-
-
-//     // store a reference to the User document so we can populate later
-//     userid: {
-//         type: mongoose.Schema.Types.ObjectId,
-//         ref: 'user',
-//         required: true
-//     },
-//     date: {
-//         type: Date,
-//         default: Date.now
-//     },
-//     weeklypayment: {
-//         type: Number,
-//         default: 0
-//     },
-//     weeklypaymentfine: {
-//         type: Number,
-//         default: 0
-//     },
-
-//     loan: {
-//         type: Number,
-//         default: 0
-//     },
-//     loanFine: {
-//         type: Number,
-//         default: 0
-//     }
-// });

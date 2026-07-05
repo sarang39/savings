@@ -92,7 +92,7 @@ function App() {
                   <Route path='/newhome' element={<NewHomePage />} />
                   <Route path='/dashboard' element={<TripNestDashboard />} />
                   <Route path='/groupdetail' element={<GroupDetails />} />
-                  <Route path='/addcontribution' element={<AddContribution />} />
+                  <Route path='/addcontribution/:tripId' element={<AddContribution />} />
                   <Route path='/addexpense' element={<AddExpense />} />
                   <Route path='/creategroup' element={<CreateGroup />} />
                   <Route path='logi' element={<LoginPage />} />

@@ -16,5 +16,7 @@ router.put("/editpayment/:id", adminpriority, transactionController.Editpayment)
 router.post("/pay", transactionController.paymentWithStripe)
 //get trip total by id
 router.get("/TripTotalAmount/:tripId", transactionController.getTripTotalAmount)
+//create contribution direct db
+router.post("/createcontributiondirectdb/:tripId", userMiddleware, transactionController.createcontributiondirectdb)
 
 module.exports = router
