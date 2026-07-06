@@ -1,6 +1,7 @@
 
 import React from "react";
 import "./newhome.css";
+import { useNavigate } from "react-router-dom";
 
 const memories = [
     {
@@ -30,6 +31,10 @@ const memories = [
 ];
 
 function NewHomePage() {
+    const navigate = useNavigate();
+    const navigateToCreateGroup = () => {
+        navigate("/creategroup");
+    }
     return (
         <div className="home-container">
             {/* Hero Section */}
@@ -49,8 +54,12 @@ function NewHomePage() {
                     </p>
 
                     <div className="hero-buttons">
-                        <button className="primary-btn">Create Group</button>
-                        <button className="secondary-btn">Explore Trips</button>
+                        <button className="primary-btn" onClick={navigateToCreateGroup}>
+                            Create Group
+                        </button>
+                        <button className="secondary-btn" onClick={() => navigate("/groupdetail")}>
+                            Explore Trips
+                        </button>
                     </div>
                 </div>
 
@@ -58,7 +67,6 @@ function NewHomePage() {
                     <div className="glass-card">
                         <h3>Total Savings</h3>
                         <h1>₹1,24,500</h1>
-
                         <div className="card-row">
                             <div>
                                 <p>Members</p>

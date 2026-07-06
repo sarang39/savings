@@ -296,7 +296,7 @@ export default function TripNestLandingPage() {
     }
     function handleClick() {
         if (token) {
-            window.location.href = "/dashboard";
+            window.location.href = "/newhome";
         } else {
             window.location.href = "/regi";
         }
