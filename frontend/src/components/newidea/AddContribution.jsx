@@ -1,27 +1,58 @@
 import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import axios from 'react-router-dom';
-import axiosInstance from 'axios'; // or use standard axios
+import axios from 'axios';
 import './all.css';
 
 export default function AddContribution() {
     const { tripId } = useParams();
     const navigate = useNavigate();
-
-    // Read the authorization token exactly like your working component does
     const token = localStorage.getItem("AuthToken");
 
     const [amount, setAmount] = useState('');
     const [description, setDescription] = useState('');
     const [category, setCategory] = useState('other');
     const [notes, setNotes] = useState('');
-
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState({ type: '', text: '' });
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
+    const getPayload = () => ({
+        trip: tripId,
+        tripId: tripId,
+        amount: parseFloat(amount),
+        description: description || "Group Contribution Pool",
+        category,
+        notes,
+        type: "contribution",
+        receiptUrl: null
+    });
 
+    const handleStripeContribution = async (e) => {
+        e.preventDefault();
+        if (!amount || isNaN(amount) || parseFloat(amount) <= 0) {
+            setMessage({ type: 'error', text: 'Please enter a valid amount.' });
+            return;
+        }
+
+        setLoading(true);
+        try {
+            const response = await axios.post(
+                `${process.env.REACT_APP_API}/api/transactions/pay`,
+                getPayload(),
+                { headers: { Authorization: `Bearer ${token}` } }
+            );
+            if (response.status === 200 && response.data.url) {
+                window.location.href = response.data.url;
+            }
+        } catch (error) {
+            console.error("Stripe Session Creation Error:", error);
+            setMessage({ type: 'error', text: 'Gateway configuration setup failure.' });
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleSubmitOffline = async (e) => {
+        e.preventDefault();
         if (!amount || isNaN(amount) || parseFloat(amount) <= 0) {
             setMessage({ type: 'error', text: 'Please enter a valid contribution amount.' });
             return;
@@ -30,25 +61,11 @@ export default function AddContribution() {
         setLoading(true);
         setMessage({ type: '', text: '' });
 
-        const payload = {
-            trip: tripId,
-            amount: parseFloat(amount),
-            description: description || "Group Contribution Pool",
-            category,
-            notes,
-            receiptUrl: null
-        };
-
         try {
-            // Using your dynamic REACT_APP_API string and appending your Auth Headers
-            const response = await axiosInstance.post(
+            const response = await axios.post(
                 `${process.env.REACT_APP_API}/api/transactions/createcontributiondirectdb/${tripId}`,
-                payload,
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    }
-                }
+                getPayload(),
+                { headers: { Authorization: `Bearer ${token}` } }
             );
 
             if (response.status === 201) {
@@ -57,17 +74,15 @@ export default function AddContribution() {
                 setDescription('');
                 setCategory('other');
                 setNotes('');
-
             }
         } catch (error) {
             console.error("Contribution Error:", error);
-            const errorMsg = error.response?.data?.message || "Something went wrong while saving your contribution.";
+            const errorMsg = error.response?.data?.message || "Something went wrong.";
             setMessage({ type: 'error', text: errorMsg });
         } finally {
             setLoading(false);
         }
     };
-
 
     return (
         <div className="pro-page">
@@ -78,19 +93,17 @@ export default function AddContribution() {
                         <p>Manage member savings contributions and track funding progress.</p>
                     </div>
                     <button className="primary-btn" onClick={() => navigate(-1)}>
-                        Contribution History
+                        Back
                     </button>
                 </div>
 
                 <div className="expense-layout">
-                    <form className="pro-card" onSubmit={handleSubmit}>
+                    <form className="pro-card" onSubmit={(e) => e.preventDefault()}>
                         <h2 className="form-title">Contribution Form</h2>
 
                         {message.text && (
                             <div className={`alert-box ${message.type}`} style={{
-                                padding: '10px',
-                                marginBottom: '15px',
-                                borderRadius: '4px',
+                                padding: '10px', marginBottom: '15px', borderRadius: '4px',
                                 backgroundColor: message.type === 'success' ? '#d4edda' : '#f8d7da',
                                 color: message.type === 'success' ? '#155724' : '#721c24'
                             }}>
@@ -122,10 +135,7 @@ export default function AddContribution() {
 
                             <div className="input-box">
                                 <label>Category Type</label>
-                                <select
-                                    value={category}
-                                    onChange={(e) => setCategory(e.target.value)}
-                                >
+                                <select value={category} onChange={(e) => setCategory(e.target.value)}>
                                     <option value="other">Other</option>
                                     <option value="travel">Travel</option>
                                     <option value="food">Food</option>
@@ -143,14 +153,14 @@ export default function AddContribution() {
                             ></textarea>
                         </div>
 
-                        <button
-                            type="submit"
-                            className="submit-btn"
-                            disabled={loading}
-                            style={{ opacity: loading ? 0.7 : 1, cursor: loading ? 'not-allowed' : 'pointer' }}
-                        >
-                            {loading ? "Adding..." : "Add Contribution"}
-                        </button>
+                        <div className="button-group" style={{ display: 'flex', gap: '10px', marginTop: '20px' }}>
+                            <button type="button" className="submit-btn" onClick={handleStripeContribution} disabled={loading} style={{ flex: 1 }}>
+                                Pay Online via Stripe
+                            </button>
+                            <button type="button" className="submit-btn secondary" onClick={handleSubmitOffline} disabled={loading} style={{ flex: 1, backgroundColor: '#6c757d' }}>
+                                Log Sandbox Direct DB
+                            </button>
+                        </div>
                     </form>
 
                     <div className="right-sidebar">
