@@ -9,6 +9,7 @@ import {
 import './groupdetails.css';
 
 export default function GroupDetails() {
+    const [transactionHistory, setTransactionHistory] = useState([]);
     const navigate = useNavigate();
     const [token, setToken] = useState(localStorage.getItem("AuthToken"));
     const [totalAmount, setTotalAmount] = useState(0);
@@ -33,6 +34,8 @@ export default function GroupDetails() {
     const [members, setmembers] = useState([])
     const [showPopup, setShowPopup] = useState(false);
     const [contributionAmount, setContributionAmount] = useState(0);
+    const [tripbalance, setTripBalance] = useState(0);
+    const [memberBalances, setMemberBalances] = useState([]);
 
     const inviteLink = `${window.location.origin}/joingroup/${selectedId}`;
 
@@ -172,10 +175,13 @@ export default function GroupDetails() {
                 }
             );
 
-            console.log(response.data);
+            console.log('result:::', response.data);
 
             setTotalAmount(response.data.totalAmount);
             setContributionAmount(response.data.contributionAmount);
+            setTransactionHistory(response.data.transactionHistory || []);
+            setTripBalance(response.data.tripBalance);
+            setMemberBalances(response.data.memberBalances || []);
 
         } catch (err) {
             console.log("Get Trip Total Error:", err);
@@ -391,6 +397,11 @@ export default function GroupDetails() {
                     {/* STATS */}
                     <div className="stats-grid">
                         <div className="pro-card stat-card">
+                            <p>Trip Balance</p>
+                            <h2>₹{tripbalance}</h2>
+                            <span>75% completed</span>
+                        </div>
+                        <div className="pro-card stat-card">
                             <p>Goal Amount</p>
                             <h2>₹{dashbordItems.goalamount}</h2>
                             <span>75% completed</span>
@@ -456,16 +467,16 @@ export default function GroupDetails() {
                                         <p style={{ color: '#888', padding: '10px 0' }}>No approved members yet.</p>
                                     ) : (
                                         members
-                                            // 1. Filter out any members whose status is not 'approved'
                                             .filter(member => member.status === 'approved')
                                             .map((member, index) => {
                                                 const memberName = member.user && member.user.name ? member.user.name : "Unknown Member";
                                                 const initial = memberName.charAt(0).toUpperCase();
-
-                                                // 2. Determine if this member is the trip leader/admin
-                                                // Checks against the activeDataset's leader property parsed from your gettrips function
                                                 const isLeader = activeDataset?.leader?.id === member.user?._id || index === 0;
                                                 const roleText = isLeader ? "Admin / Creator" : "Member";
+
+                                                // Find matching calculated balance amount from aggregate data
+                                                const userBalanceRecord = memberBalances.find(b => b.userId === member.user?._id);
+                                                const computedAmount = userBalanceRecord ? userBalanceRecord.netBalance : 0;
 
                                                 return (
                                                     <div className="member-row" key={member._id || index}>
@@ -477,7 +488,10 @@ export default function GroupDetails() {
                                                             </div>
                                                         </div>
                                                         <div className="member-right">
-                                                            <h3>₹0</h3>
+                                                            {/* Render dynamic balance formatting matching negative values if owing */}
+                                                            <h3 style={{ color: computedAmount >= 0 ? '#28a745' : '#dc3545' }}>
+                                                                ₹{Number(computedAmount).toFixed(2)}
+                                                            </h3>
                                                             <div className="member-progress">
                                                                 <div className="progress-fill" style={{ width: '100%' }}></div>
                                                             </div>
@@ -493,19 +507,6 @@ export default function GroupDetails() {
                         {/* RIGHT */}
                         <div className="right-section">
                             <div className="pro-card">
-                                <h2 className="timeline-title">Activity Timeline</h2>
-                                <div className="timeline">
-                                    <div className="timeline-item">
-                                        <div className="timeline-dot"></div>
-                                        <div>
-                                            <h4>Rahul added ₹5000</h4>
-                                            <p>Contribution added successfully</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="pro-card">
                                 <h2>Budget Overview</h2>
                                 <div className="budget-circle">
                                     <div className="budget-inner">
@@ -514,6 +515,39 @@ export default function GroupDetails() {
                                     </div>
                                 </div>
                             </div>
+                            <div className="pro-card">
+                                <h2 className="timeline-title">Activity Timeline</h2>
+
+                                <div className="timeline">
+                                    {transactionHistory.length > 0 ? (
+                                        transactionHistory.map((item) => (
+                                            <div className="timeline-item" key={item._id}>
+                                                <div className="timeline-dot"></div>
+
+                                                <div>
+                                                    <h4>
+                                                        {item.paidBy?.name}{" "}
+                                                        {item.type === "contribution"
+                                                            ? `added ₹${item.amount}`
+                                                            : `spent ₹${item.amount}`}
+                                                    </h4>
+
+                                                    <p>
+                                                        {item.description}
+                                                        {" • "}
+                                                        {new Date(item.createdAt).toLocaleString()}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        ))
+                                    ) : (
+                                        <p>No activity yet.</p>
+                                    )}
+                                </div>
+                            </div>
+
+
+
                         </div>
                     </div>
                 </div>
