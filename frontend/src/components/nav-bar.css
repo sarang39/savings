@@ -54,7 +54,7 @@
     padding: 0px px 0px 40px;
     backdrop-filter: blur(0px);
     background: rgba(255, 255, 255, 0.06);
-    border-bottom: 2px solid rgba(255, 255, 255, 0.15);
+    border-bottom: 2px solid rgba(255, 255, 255, 0);
 }
 
 .ring {

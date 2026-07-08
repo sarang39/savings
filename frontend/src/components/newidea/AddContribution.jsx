@@ -74,6 +74,7 @@ export default function AddContribution() {
                 setDescription('');
                 setCategory('other');
                 setNotes('');
+                navigate(-1)
             }
         } catch (error) {
             console.error("Contribution Error:", error);

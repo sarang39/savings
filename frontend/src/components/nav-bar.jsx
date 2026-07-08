@@ -289,48 +289,16 @@ export default function Nav() {
                                     >
 
                                         {[{
-                                            label: "🆕 New Home",
+                                            label: "Home",
                                             action: () => navigate("/newhome"),
                                         },
                                         {
-                                            label: "👥 Group Details",
+                                            label: "👥 Trip Details",
                                             action: () => navigate("/groupdetail"),
                                         },
                                         {
                                             label: "✈️ Create Trip",
                                             action: () => navigate("/creategroup"),
-                                        },
-                                        {
-                                            label: "👥 Join Group",
-                                            action: () => navigate("/joingroup"),
-                                        },
-                                        {
-                                            label: "🧪 Test",
-                                            action: () => navigate("/profile"),
-                                        },
-                                        {
-                                            label: "💰 Add Contribution",
-                                            action: () => navigate("/addcontribution"),
-                                        },
-
-
-
-                                        { label: "loginn", action: () => navigate("/logi") },
-
-
-                                        {
-                                            label: "/landing",
-                                            action: () => navigate("/landing"),
-                                        },
-
-                                        {
-                                            label: "📊 Analytics",
-                                            action: () => navigate("/analytics"),
-                                        },
-
-                                        {
-                                            label: "🤖 AI Assistant",
-                                            action: () => navigate("/chatbot"),
                                         },
 
                                         {
@@ -338,17 +306,6 @@ export default function Nav() {
                                             action: () => profile(),
                                         },
 
-                                        {
-                                            label: "⚙️ Edit Profile",
-                                            action: () =>
-                                                setedit(edit === 1 ? 0 : 1),
-                                        },
-
-                                        {
-                                            label: "💵 Payments",
-                                            action: () =>
-                                                navigate(`/payment/${id}`),
-                                        },
 
                                         {
                                             label: "📞 Contact",

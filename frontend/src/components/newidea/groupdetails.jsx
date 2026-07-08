@@ -36,6 +36,7 @@ export default function GroupDetails() {
     const [contributionAmount, setContributionAmount] = useState(0);
     const [tripbalance, setTripBalance] = useState(0);
     const [memberBalances, setMemberBalances] = useState([]);
+    const [graphamount, setgraphamount] = useState(0)
 
     const inviteLink = `${window.location.origin}/joingroup/${selectedId}`;
 
@@ -182,6 +183,9 @@ export default function GroupDetails() {
             setTransactionHistory(response.data.transactionHistory || []);
             setTripBalance(response.data.tripBalance);
             setMemberBalances(response.data.memberBalances || []);
+            setgraphamount(dashbordItems.goalamount > 0
+                ? Math.min(100, Math.round((contributionAmount / dashbordItems.goalamount) * 100))
+                : 0)
 
         } catch (err) {
             console.log("Get Trip Total Error:", err);
@@ -214,6 +218,7 @@ export default function GroupDetails() {
             getTripTotalAmount(selectedId);
         }
     }, [selectedId]);
+    // Calculate percentage safely to prevent division by zero or numbers exceeding 100%
 
     return (
         <div className="adaptive-app-wrapper">
@@ -336,8 +341,9 @@ export default function GroupDetails() {
             <aside className="master-sidebar-pane">
                 <header className="app-branding-bar">
                     <div className="brand-text">
-                        <span className="sub-tag">System Registry</span>
-                        <h2>Console v3</h2>
+                        <span className="sub-tag">.</span>
+                        <span className="sub-tag">Registered trip details</span>
+                        <h2>Trip list </h2>
                     </div>
                     <div className="profile-badge">SP</div>
                 </header>
@@ -398,7 +404,7 @@ export default function GroupDetails() {
                     <div className="stats-grid">
                         <div className="pro-card stat-card">
                             <p>Trip Balance</p>
-                            <h2>₹{tripbalance}</h2>
+                            <h2 style={{ color: tripbalance >= 0 ? '#28a745' : '#dc3545' }}>₹{tripbalance}</h2>
                             <span>75% completed</span>
                         </div>
                         <div className="pro-card stat-card">
@@ -407,13 +413,13 @@ export default function GroupDetails() {
                             <span>75% completed</span>
                         </div>
                         <div className="pro-card stat-card">
-                            <p>Current Expense</p>
-                            <h2>₹{totalAmount}</h2>
+                            <p>Current Inhand</p>
+                            <h2 style={{ color: totalAmount >= 0 ? '#28a745' : '#dc3545' }}>₹{totalAmount}</h2>
                             <span>5% completed</span>
                         </div>
                         <div className="pro-card stat-card">
                             <p>Current Contribution</p>
-                            <h2>₹{contributionAmount}</h2>
+                            <h2 >₹{contributionAmount}</h2>
                             <span>10% completed</span>
                         </div>
 
@@ -508,9 +514,19 @@ export default function GroupDetails() {
                         <div className="right-section">
                             <div className="pro-card">
                                 <h2>Budget Overview</h2>
-                                <div className="budget-circle">
+                                <div
+                                    className="budget-circle"
+                                    style={{
+                                        background: `conic-gradient(#28a745 ${graphamount}%, #e2e8f0 ${graphamount}% 100%)`,
+                                        borderRadius: '50%',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        position: 'relative'
+                                    }}
+                                >
                                     <div className="budget-inner">
-                                        <h2>{dashbordItems.budgetoverview}%</h2>
+                                        <h2>{graphamount}%</h2>
                                         <p>Goal Completed</p>
                                     </div>
                                 </div>
