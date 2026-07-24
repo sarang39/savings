@@ -18,5 +18,8 @@ router.post("/pay", transactionController.paymentWithStripe)
 router.get("/TripTotalExpenseAmount/:tripId", transactionController.getTripTotalExpenseAmount)
 //create contribution direct db
 router.post("/createcontributiondirectdb/:tripId", userMiddleware, transactionController.createcontributiondirectdb)
-
+//get user trip performance metrics
+router.get("/getUserTripPerformanceMetrics/:userId", userMiddleware, transactionController.getUserTripPerformanceMetrics)
+//get user profile dashboard data
+router.get("/getUserProfileDashboardData/:userId", userMiddleware, transactionController.getUserProfileDashboardData)
 module.exports = router

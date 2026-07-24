@@ -243,6 +243,8 @@ export default function Payment() {
                     { headers: { Authorization: `Bearer ${token}` } }
                 );
                 setTripMembers(response.data.members || []);
+                console.log(response.data.members);
+
             } catch (err) {
                 console.error("Error fetching trip members:", err);
             }
@@ -252,7 +254,11 @@ export default function Payment() {
 
     useEffect(() => {
         if (tripMembers.length > 0) {
-            setSelectedParticipants(tripMembers.map(m => m.user._id));
+            setSelectedParticipants(
+                tripMembers
+                    .filter(m => m.user)
+                    .map(m => m.user._id)
+            );
         }
     }, [tripMembers]);
 
@@ -408,30 +414,32 @@ export default function Payment() {
                             <div className="form-group">
                                 <label>Participants Allocation</label>
                                 <div className="participants-grid">
-                                    {tripMembers.map(member => {
-                                        const isChecked = selectedParticipants.includes(member.user._id);
-                                        return (
-                                            <div key={member.user._id} className="participant-split-row" style={{ marginBottom: '10px' }}>
-                                                <div
-                                                    className={`participant-chip ${isChecked ? 'active' : ''}`}
-                                                    onClick={() => toggleParticipant(member.user._id)}
-                                                    style={{ cursor: 'pointer', display: 'inline-block', marginRight: '10px' }}
-                                                >
-                                                    {member.user.name}
-                                                </div>
+                                    {tripMembers
+                                        .filter(member => member.user)
+                                        .map(member => {
+                                            const isChecked = selectedParticipants.includes(member.user._id);
+                                            return (
+                                                <div key={member.user._id} className="participant-split-row" style={{ marginBottom: '10px' }}>
+                                                    <div
+                                                        className={`participant-chip ${isChecked ? 'active' : ''}`}
+                                                        onClick={() => toggleParticipant(member.user._id)}
+                                                        style={{ cursor: 'pointer', display: 'inline-block', marginRight: '10px' }}
+                                                    >
+                                                        {member.user.name}
+                                                    </div>
 
-                                                {splitType === "custom" && isChecked && (
-                                                    <input
-                                                        type="number"
-                                                        placeholder="Individual Share (₹)"
-                                                        value={customShares[member.user._id] || ''}
-                                                        onChange={(e) => handleShareChange(member.user._id, e.target.value)}
-                                                        style={{ width: '130px', display: 'inline-block', padding: '4px 8px' }}
-                                                    />
-                                                )}
-                                            </div>
-                                        );
-                                    })}
+                                                    {splitType === "custom" && isChecked && (
+                                                        <input
+                                                            type="number"
+                                                            placeholder="Individual Share (₹)"
+                                                            value={customShares[member.user._id] || ''}
+                                                            onChange={(e) => handleShareChange(member.user._id, e.target.value)}
+                                                            style={{ width: '130px', display: 'inline-block', padding: '4px 8px' }}
+                                                        />
+                                                    )}
+                                                </div>
+                                            );
+                                        })}
                                 </div>
                             </div>
 
@@ -451,7 +459,7 @@ export default function Payment() {
                             Pay Online via Stripe
                         </button>
                         <button type="button" className="btn-secondary" onClick={handleAddExpenseOffline}>
-                            Test Run (Direct DB Add)
+                            ADD
                         </button>
                     </div>
                 </form>

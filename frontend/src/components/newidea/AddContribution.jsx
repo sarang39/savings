@@ -159,7 +159,7 @@ export default function AddContribution() {
                                 Pay Online via Stripe
                             </button>
                             <button type="button" className="submit-btn secondary" onClick={handleSubmitOffline} disabled={loading} style={{ flex: 1, backgroundColor: '#6c757d' }}>
-                                Log Sandbox Direct DB
+                               ADD
                             </button>
                         </div>
                     </form>

@@ -17,7 +17,6 @@ const transactionSchema = new mongoose.Schema({
         type: String,
         enum: ["expense", "contribution", "p2p"],
     },
-
     amount: {
         type: Number,
         required: true,

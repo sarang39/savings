@@ -12,20 +12,20 @@ const register = async (req, res) => {
         console.log(req.body);
         console.log(req.file);
         const hashedPassword = await bcrypt.hash(password, 10);
-        let imageUrl = null; // ✅ define outside
+        let imageUrl = null; 
         if (req.file) {
             const result = await cloudinary.uploader.upload(req.file.path, {
                 folder: "savings-app",
                 use_filename: true
             });
-            imageUrl = result.secure_url; // ✅ assign here
+            imageUrl = result.secure_url; 
         }
         const userData = {
             name,
             email,
             role,
             password: hashedPassword,
-            photo: imageUrl // ✅ use variable
+            photo: imageUrl 
         };
 
         const user = new User(userData);

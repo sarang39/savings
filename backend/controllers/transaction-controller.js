@@ -407,7 +407,7 @@ const Transaction = require("../model/transactions");
 const User = require("../model/users");
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 const mongoose = require('mongoose');
-// Equal split calculation helper
+
 const calculateEqualSplitHelper = (amount, participants = []) => {
   if (participants.length === 0) return [];
 
@@ -644,11 +644,13 @@ const paymentWithStripe = async (req, res) => {
     res.status(500).json({ message: "Server error while creating Stripe session" });
   }
 };
-
-// 7. Dynamic aggregate calculations featuring chronological workspace history feeds
 const getTripTotalExpenseAmount = async (req, res) => {
   try {
     const { tripId } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(tripId)) {
+      return res.status(400).json({ message: "Invalid system Trip Identifier provided." });
+    }
 
     const result = await Transaction.aggregate([
       {
@@ -673,16 +675,41 @@ const getTripTotalExpenseAmount = async (req, res) => {
           ],
           memberExpenses: [
             { $match: { type: "expense", paidBy: { $ne: null } } },
-            { $group: { _id: "$paidBy", expensePaid: { $sum: "$amount" } } }
+            {
+              $group: {
+                _id: "$paidBy",
+                expensePaid: { $sum: "$amount" },
+                items: {
+                  $push: {
+                    description: "$description",
+                    amount: "$amount",
+                    createdAt: "$createdAt"
+                  }
+                }
+              }
+            }
           ],
           memberSplits: [
             { $match: { type: "expense" } },
             { $unwind: "$splitDetails" },
             { $match: { "splitDetails.user": { $ne: null } } },
-            { $group: { _id: "$splitDetails.user", splitAmount: { $sum: "$splitDetails.share" } } }
+            {
+              $group: {
+                _id: "$splitDetails.user",
+                splitAmount: { $sum: "$splitDetails.share" },
+                items: {
+                  $push: {
+                    description: "$description",
+                    share: "$splitDetails.share",
+                    createdAt: "$createdAt"
+                  }
+                }
+              }
+            }
           ],
           historyList: [
             { $sort: { createdAt: -1 } },
+            { $limit: 30 }, // Guard block preventing excessive payload transport over networks
             {
               $lookup: {
                 from: "users",
@@ -711,29 +738,47 @@ const getTripTotalExpenseAmount = async (req, res) => {
     const data = result[0] || {};
     const totalAmount = data.expenses?.[0]?.totalAmount || 0;
     const contributionAmount = data.contributions?.[0]?.totalAmount || 0;
-    const trippbalance = contributionAmount - totalAmount;
+    const tripBalance = contributionAmount - totalAmount;
 
     const contributionMap = {};
     const expenseMap = {};
     const splitMap = {};
 
-    (data.memberContributions || []).forEach(item => { if (item._id) contributionMap[item._id.toString()] = item.contribution; });
-    (data.memberExpenses || []).forEach(item => { if (item._id) expenseMap[item._id.toString()] = item.expensePaid; });
-    (data.memberSplits || []).forEach(item => { if (item._id) splitMap[item._id.toString()] = item.splitAmount; });
+    (data.memberContributions || []).forEach(item => {
+      if (item._id) contributionMap[item._id.toString()] = { amount: item.contribution };
+    });
 
-    const userIds = new Set([...Object.keys(contributionMap), ...Object.keys(expenseMap), ...Object.keys(splitMap)]);
+    (data.memberExpenses || []).forEach(item => {
+      if (item._id) expenseMap[item._id.toString()] = { amount: item.expensePaid, items: item.items };
+    });
+
+    (data.memberSplits || []).forEach(item => {
+      if (item._id) splitMap[item._id.toString()] = { amount: item.splitAmount, items: item.items };
+    });
+
+    // Create array containing all distinct users involved in transactions
+    const userIds = new Set([
+      ...Object.keys(contributionMap),
+      ...Object.keys(expenseMap),
+      ...Object.keys(splitMap)
+    ]);
 
     const memberBalances = [...userIds].map(userId => {
-      const contribution = contributionMap[userId] || 0;
-      const expensePaid = expenseMap[userId] || 0;
-      const splitAmount = splitMap[userId] || 0;
+      const contribution = contributionMap[userId]?.amount || 0;
+      const expensePaid = expenseMap[userId]?.amount || 0;
+      const splitAmount = splitMap[userId]?.amount || 0;
+
       return {
         userId,
         contribution,
         expensePaid,
         splitAmount,
         tripBalance: contribution - expensePaid,
-        netBalance: contribution + expensePaid - splitAmount
+        // Formula mapping actual net cash impact for a person:
+        // What they paid overall minus their personal individual liability share cost
+        netBalance: (contribution + expensePaid) - splitAmount,
+        paidExpensesList: expenseMap[userId]?.items || [],
+        consumedSplitsList: splitMap[userId]?.items || []
       };
     });
 
@@ -741,23 +786,185 @@ const getTripTotalExpenseAmount = async (req, res) => {
       totalAmount,
       contributionAmount,
       memberBalances,
-      tripBalance: trippbalance,
+      tripBalance,
       transactionHistory: data.historyList || []
     });
 
   } catch (err) {
-    console.error("Error in getTripTotalExpenseAmount:", err);
-    return res.status(500).json({ message: "Server error while calculating trip details" });
+    console.error("Aggregation Error in getTripTotalExpenseAmount:", err);
+    return res.status(500).json({ message: "Server error while compiling account balances." });
   }
 };
+// Get aggregated trip expenses, contributions, and settlements for a specific user profile
+const getUserTripPerformanceMetrics = async (req, res) => {
+  try {
+    const userId = req.params.id || req.userId;
+
+    if (!mongoose.Types.ObjectId.isValid(userId)) {
+      return res.status(400).json({ message: "Invalid system User Identifier." });
+    }
+
+    const targetUser = new mongoose.Types.ObjectId(userId);
+
+    const metrics = await Transaction.aggregate([
+      {
+        $match: {
+          isDeleted: false
+        }
+      },
+      {
+        $facet: {
+          // Total pool contributions deposited by this specific user
+          personalContributions: [
+            { $match: { type: "contribution", paidBy: targetUser } },
+            { $group: { _id: null, total: { $sum: "$amount" } } }
+          ],
+          // Out-of-pocket cash advanced for group expenses by this specific user
+          personalExpensesAdvanced: [
+            { $match: { type: "expense", paidBy: targetUser } },
+            { $group: { _id: null, total: { $sum: "$amount" } } }
+          ],
+          // Individual split liability shares assigned to this user across all expenses
+          personalSplitLiabilities: [
+            { $match: { type: "expense" } },
+            { $unwind: "$splitDetails" },
+            { $match: { "splitDetails.user": targetUser } },
+            { $group: { _id: null, total: { $sum: "$splitDetails.share" } } }
+          ],
+          // Categorized expenses to feed the Recharts Donut Pie component dynamically
+          categoryBreakdown: [
+            { $match: { type: "expense", participants: targetUser } },
+            { $unwind: "$splitDetails" },
+            { $match: { "splitDetails.user": targetUser } },
+            {
+              $group: {
+                _id: "$category",
+                value: { $sum: "$splitDetails.share" }
+              }
+            }
+          ]
+        }
+      }
+    ]);
+
+    const data = metrics[0] || {};
+    const totalContributions = data.personalContributions?.[0]?.total || 0;
+    const totalAdvanced = data.personalExpensesAdvanced?.[0]?.total || 0;
+    const totalOwedShare = data.personalSplitLiabilities?.[0]?.total || 0;
+
+    // Total cash physically spent out of their wallet
+    const overallInvested = totalContributions + totalAdvanced;
+    // Net status formula: (Pool Contributions + Expenses Advanced) - Target Split Liability
+    const netBalanceStatus = overallInvested - totalOwedShare;
+
+    // Format the category breakdown list for Recharts
+    const chartData = (data.categoryBreakdown || []).map(item => ({
+      name: item._id ? item._id.charAt(0).toUpperCase() + item._id.slice(1) : "Other",
+      value: Number(item.value.toFixed(2))
+    }));
+
+    // Fallback static structural values if no specific categories are hit yet
+    const structuredChart = chartData.length > 0 ? chartData : [
+      { name: "No Liabilities Assigned", value: 0 }
+    ];
+
+    return res.status(200).json({
+      walletBalance: totalContributions, // Total accumulated savings pool
+      totalTripExpensesAdvanced: totalAdvanced,
+      totalOwedLiabilityShare: totalOwedShare,
+      netBalanceStatus,
+      overallInvested,
+      categoryChartData: structuredChart
+    });
+
+  } catch (err) {
+    console.error("Profile Aggregation Engine Error:", err);
+    return res.status(500).json({ message: "Server error compiling profile dashboard statistics." });
+  }
+};
+
+// Remember to append this function to your module.exports exports block!
+// Fetch all transaction metrics and itemized history log for a specific user profile
+const getUserProfileDashboardData = async (req, res) => {
+  try {
+    const userId = req.params.id || req.userId;
+
+    if (!mongoose.Types.ObjectId.isValid(userId)) {
+      return res.status(400).json({ message: "Invalid system User Identifier." });
+    }
+
+    const targetUser = new mongoose.Types.ObjectId(userId);
+
+    // 1. Compile Aggregated Metrics (Using your working logic)
+    const metrics = await Transaction.aggregate([
+      { $match: { isDeleted: false } },
+      {
+        $facet: {
+          personalContributions: [
+            { $match: { type: "contribution", paidBy: targetUser } },
+            { $group: { _id: null, total: { $sum: "$amount" } } }
+          ],
+          personalExpensesAdvanced: [
+            { $match: { type: "expense", paidBy: targetUser } },
+            { $group: { _id: null, total: { $sum: "$amount" } } }
+          ],
+          personalSplitLiabilities: [
+            { $match: { type: "expense" } },
+            { $unwind: "$splitDetails" },
+            { $match: { "splitDetails.user": targetUser } },
+            { $group: { _id: null, total: { $sum: "$splitDetails.share" } } }
+          ]
+        }
+      }
+    ]);
+
+    const data = metrics[0] || {};
+    const totalContributions = data.personalContributions?.[0]?.total || 0;
+    const totalAdvanced = data.personalExpensesAdvanced?.[0]?.total || 0;
+    const totalOwedShare = data.personalSplitLiabilities?.[0]?.total || 0;
+
+    // Net status formula: (Pool Contributions + Expenses Advanced) - Target Split Liability
+    const netBalanceStatus = (totalContributions + totalAdvanced) - totalOwedShare;
+
+    // 2. Fetch Individual Transaction Logs involving this user
+    const historyLogs = await Transaction.find({
+      isDeleted: false,
+      $or: [
+        { paidBy: targetUser },
+        { participants: targetUser },
+        { "splitDetails.user": targetUser }
+      ]
+    })
+      .sort({ createdAt: -1 })
+      .lean();
+
+    return res.status(200).json({
+      walletBalance: totalContributions,
+      expensePaid: totalAdvanced,
+      splitAmount: totalOwedShare,
+      netBalance: netBalanceStatus,
+      surplus: netBalanceStatus > 0 ? netBalanceStatus : 0,
+      deficit: netBalanceStatus < 0 ? Math.abs(netBalanceStatus) : 0,
+      historyLogs
+    });
+
+  } catch (err) {
+    console.error("Dashboard Engine Error:", err);
+    return res.status(500).json({ message: "Server error compiling dashboard details." });
+  }
+};
+
+// Remember to append 'getUserProfileDashboardData' to your module.exports block!
 
 module.exports = {
   createTransaction,
   getAllTransactions,
   getTransactionById,
+  getUserProfileDashboardData,
   allcalculations,
   Editpayment,
   paymentWithStripe,
   getTripTotalExpenseAmount,
-  createcontributiondirectdb
+  createcontributiondirectdb,
+  getUserTripPerformanceMetrics
 };

@@ -289,7 +289,7 @@ export default function Nav() {
                                     >
 
                                         {[{
-                                            label: "Home",
+                                            label: "🏠︎ Home",
                                             action: () => navigate("/newhome"),
                                         },
                                         {
@@ -304,16 +304,6 @@ export default function Nav() {
                                         {
                                             label: "👤 Profile",
                                             action: () => profile(),
-                                        },
-
-
-                                        {
-                                            label: "📞 Contact",
-                                            action: () => navigate("/contact"),
-                                        },
-                                        {
-                                            label: "ℹ️ About",
-                                            action: () => navigate("/about"),
                                         },
                                         ].map((item, index) => (
                                             <button
